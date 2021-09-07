@@ -59,7 +59,7 @@ void getGridFromFile(Grid<char>& grid) {
     input.close();
 }
 
-void printGrid(Grid<char>& grid) {
+void printGrid(const Grid<char>& grid) {
     for(int row = 0; row < grid.numRows(); row++) {
         for (int col = 0; col < grid.numCols(); col++) {
             cout << grid.get(row, col);
