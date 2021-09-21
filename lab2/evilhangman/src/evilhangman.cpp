@@ -7,6 +7,10 @@ using namespace std;
 
 const string ALPHABET  = "abcdefghijklmnopqrstuvwxyz";
 unordered_multimap<int, string> dict;
+string currentWord = "";
+string guessedLetters = "";
+int guesses;
+int length;
 
 /*
  * Saves all the words in the english dictionary to an
@@ -90,26 +94,66 @@ bool askUserForInterface() {
 }
 
 void game(unordered_multimap<int, string> dict) {
-    vector<string> listOfWords;
+    vector<string> matchingWords;
     int length = askUserForLength(dict);
     for (auto itr = dict.begin(); itr != dict.end(); itr++) {
         if (itr -> first == length) {
             string word = itr -> second;
-            listOfWords.insert(listOfWords.begin(), word);
+            matchingWords.insert(matchingWords.begin(), word);
         }
     }
 
-    cout << listOfWords.size() <<endl;;
-    cout << listOfWords[1] << endl;
+    cout << matchingWords.size() << endl;
+    cout << matchingWords[1] << endl;
+}
+
+string askUserForAGuess() {
+    string letter;
+    cout << "Guess letter." << endl;
+    cin >> letter;
+
+    if (guessedLetters.find(letter) != string::npos || ALPHABET.find(letter) == string::npos || letter.size() != 1) {
+        cout << "Error, try again." << endl;
+        askUserForAGuess();
+    }
+
+    else {
+        guessedLetters += letter;
+        //guesses--;
+    }
+
+    return letter;
+}
+
+void gameInterface() {
+    if (currentWord == "") {
+        for (int i = 0; i < length; i++) {
+            currentWord += '-';
+        }
+    }
+
+    cout << "Guesses left: " << guesses << endl;
+    cout << "Guessed letters: " << guessedLetters << endl;
+    cout << currentWord << endl;
+
+    askUserForAGuess();
+    //cout << "Words left: " <<
 }
 
 int main() {
     cout << "Welcome to Hangman." << endl;
     saveDictionary(dict);
+
+    length = askUserForLength(dict);
+    guesses = askUserForGuesses();
     //askUserForWord(dict);
     //askUserForGuesses();
     //askUserForInterface();
-    game(dict);
+    //game(dict);
+
+    while (true) {
+        gameInterface();
+    }
 
     return 0;
 }
