@@ -1,3 +1,10 @@
+/*
+ * This assignment is made by Wilmer Segerstedt and Edvin Schölin.
+ * Excecuting this program a game of hangman is intialized. The code is built
+ * to deceive the user. The algorithm will not choose a word beforehand,
+ * rather it will wait to choose a word until the user has guessed letters
+ * so that there is only one possible word to spell out left.
+*/
 #include <iostream>
 #include <string>
 #include <unordered_map>
