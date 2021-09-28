@@ -29,6 +29,10 @@ void saveDictionary(unordered_multimap<int, string>& dict) {
     }
 }
 
+/*
+ * User chooses a length for the word for which the user is going to
+ * guess.
+ */
 int askUserForLength(unordered_multimap<int, string> dict) {
     int length = 0;
 
@@ -48,6 +52,9 @@ int askUserForLength(unordered_multimap<int, string> dict) {
     return length;
 }
 
+/*
+ * User chooses a number of guesses to guess the right word.
+ */
 int askUserForGuesses() {
     int guesses = 0;
     cout << "How many guesses do you want? ";
@@ -66,6 +73,10 @@ int askUserForGuesses() {
     return guesses;
 }
 
+/*
+ * The user chooses if the user wants to see how many words are left for the
+ * computer to choose from (anwser yes for testing/grading).
+ */
 bool askUserForInterface() {
     string answer;
     cout << "Do you want to see the amount of words left in the dictionary after each guess, yes or no?"
@@ -88,6 +99,9 @@ bool askUserForInterface() {
     return false;
 }
 
+/*
+ * Calculates and returns all words given the length the user chooses.
+ */
 vector<string> allWordsGivenLength(unordered_multimap<int, string> dict, int& length) {
     vector<string> matchingWords;
     length = askUserForLength(dict);
@@ -97,10 +111,13 @@ vector<string> allWordsGivenLength(unordered_multimap<int, string> dict, int& le
             matchingWords.insert(matchingWords.begin(), word);
         }
     }
-
     return matchingWords;
 }
 
+/*
+ * User guesses a letter for the word and the method adds the guessed letter to
+ * the string of guessed letters.
+ */
 string askUserForALetter(string& guessedLetters) {
     string letter;
     cout << "Guess a letter: ";
@@ -119,6 +136,11 @@ string askUserForALetter(string& guessedLetters) {
     return letter;
 }
 
+/*
+ * Adds lines for the hidden letters in the word, adds the correct guessed letters to the word,
+ * decrement guesses for wrong guess and prints guesses left, guessed letters and the word with
+ * lines and letters.
+ */
 void gameInterface(string& currentWord, vector<int> largestFamily, string& guessedLetters, int& guesses, int& length) {
     if (currentWord == "") {
         for (int i = 0; i < length; i++) {
@@ -148,6 +170,10 @@ void gameInterface(string& currentWord, vector<int> largestFamily, string& guess
     cout << "Word: " << currentWord << endl;
 }
 
+/*
+ * Checks what type of families the guess generates. A multimap is created with the
+ * type as key and the word of that type as value. The multimap is then returned.
+ */
 multimap<vector<int>, string> checkFamilies(vector<string> matchingWords, char letter) {
     multimap<vector<int>, string> families;
     for (string word : matchingWords) {
@@ -165,6 +191,10 @@ multimap<vector<int>, string> checkFamilies(vector<string> matchingWords, char l
     return families;
 }
 
+/*
+ * Returns the family that has the most occurences in the multimap with different types of
+ * families.
+ */
 vector<int> checkMostCommonFamily(multimap<vector<int>, string> families) {
     vector<int> largestFamily;
     int max = 0;
@@ -181,6 +211,9 @@ vector<int> checkMostCommonFamily(multimap<vector<int>, string> families) {
     return largestFamily;
 }
 
+/*
+ * Adds the words of the largest family to a vector.
+ */
 vector<string> retrieveMostCommonFamily(multimap<vector<int>, string> families, vector<int> largestFamily) {
     vector<string> wordsLeft;
 
@@ -193,6 +226,11 @@ vector<string> retrieveMostCommonFamily(multimap<vector<int>, string> families, 
     return wordsLeft;
 }
 
+/*
+ * Generates the user interface and checks whether the user has won or lost to
+ * the computer. Otherwise the method calls all necessary methods for the game
+ * to continue. The method also shows all words if the user has allowed it.
+ */
 void game(string& currentWord, vector<int>& largestFamily, string& guessedLetters, int& guesses, vector<string>& allWords, int length,
           bool& gameOver, bool showWordsLeft) {
     gameInterface(currentWord, largestFamily, guessedLetters, guesses, length);
