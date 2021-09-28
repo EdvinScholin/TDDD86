@@ -13,7 +13,6 @@
 using namespace std;
 
 const string ALPHABET  = "abcdefghijklmnopqrstuvwxyz";
-unordered_set<string> dict;
 
 /*
  * Saves all the words in the english dictionary to an
@@ -49,7 +48,7 @@ pair<string, string> askUserForTwoWords() {
 /*
  * Creates a minimal word chain from a start word to an end word.
  */
-void wordChain(string w1, string w2) {
+void wordChain(string w1, string w2, unordered_set<string> dict) {
     queue<stack<string>> q;
     stack<string> chain_stack;
     unordered_set<string> neighbours;
@@ -95,11 +94,12 @@ int main() {
     cout << endl;
 
     pair<string, string> wordPair = askUserForTwoWords();
+    unordered_set<string> dict;
     saveDictionary(dict);
 
     cout << "Chain from " << wordPair.first << " back to " << wordPair.second << endl;
 
-    wordChain(wordPair.first, wordPair.second);
+    wordChain(wordPair.first, wordPair.second, dict);
 
     cout << endl;
     cout << "Have a nice day.";
