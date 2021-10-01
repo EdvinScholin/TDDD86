@@ -1,5 +1,5 @@
 /*
- * This assignment is made by Wilmer Segerstedt and Edvin Schölin.
+ * This assignment is made by Wilmer Segerstedt (wilse150) and Edvin Schölin (edvsc779).
  * Excecuting this program creates a minimal wordchain from one start
  * word to an end word after asking the user for these words.
  */
@@ -33,22 +33,16 @@ void saveDictionary(unordered_set<string>& dict) {
  * Returns a pair of two words that the user has entered
  * through the console.
  */
-pair<string, string> askUserForTwoWords() {
-    string str1;
-    string str2;
+void askUserForTwoWords(string& str1, string& str2) {
     cout << "Please type two words: ";
     cin >> str1;
     cin >> str2;
-    pair<string, string> myPair;
-    myPair.first = str1;
-    myPair.second = str2;
-    return myPair;
 }
 
 /*
  * Creates a minimal word chain from a start word to an end word.
  */
-void wordChain(string w1, string w2, unordered_set<string> dict) {
+void wordChain(string& w1, string& w2, unordered_set<string>& dict) {
     queue<stack<string>> q;
     stack<string> chain_stack;
     unordered_set<string> neighbours;
@@ -93,16 +87,18 @@ int main() {
     cout << "first into the second by changing one letter at a time." << endl;
     cout << endl;
 
-    pair<string, string> wordPair = askUserForTwoWords();
+    string word1 = "";
+    string word2 = "";
+    askUserForTwoWords(word1, word2);
     unordered_set<string> dict;
     saveDictionary(dict);
 
-    cout << "Chain from " << wordPair.first << " back to " << wordPair.second << endl;
+    cout << "Chain from " << word1 << " back to " << word2 << endl;
 
-    wordChain(wordPair.first, wordPair.second, dict);
+    wordChain(word1, word2, dict);
 
     cout << endl;
-    cout << "Have a nice day.";
+    cout << "Have a nice day." << endl;
 
     return 0;
 }

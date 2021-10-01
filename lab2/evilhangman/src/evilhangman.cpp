@@ -1,5 +1,5 @@
 /*
- * This assignment is made by Wilmer Segerstedt and Edvin Schölin.
+ * This assignment is made by Wilmer Segerstedt (wilse150) and Edvin Schölin (edvsc779).
  * Excecuting this program a game of hangman is intialized. The code is built
  * to deceive the user. The algorithm will not choose a word beforehand,
  * rather it will wait to choose a word until the user has guessed letters
@@ -11,6 +11,7 @@
 #include <map>
 #include <fstream>
 #include <vector>
+#include <set>
 
 using namespace std;
 
@@ -20,20 +21,36 @@ const string ALPHABET  = "abcdefghijklmnopqrstuvwxyz";
  * Saves all the words in the english dictionary to an
  * unordered set.
  */
-void saveDictionary(unordered_multimap<int, string>& dict) {
-    int length = 0;
-    pair<int, string> pair;
+void saveDictionary(map<int, set<string>>& dict) {
+    set<string> set;
+    //int length = 0;
     string filename = "dictionary.txt";
     ifstream input;
     input.open(filename.c_str());
     string line;
 
+    for (int len = 1; len < 46; len++) {        //inte generell
+        set = {};
+        ifstream input;
+        input.open(filename.c_str());
+        string line;
+        while (getline(input, line)) {
+            if(line.length() == len) {
+                set.insert(line);
+            }
+
+        }
+        dict.insert({len, set});
+    }
+    /*
     while (getline(input, line)) {
+
         length = line.length();
         pair.first = length;
         pair.second = line;
         dict.insert(pair);
     }
+    */
 }
 
 /*
@@ -206,13 +223,12 @@ vector<int> checkMostCommonFamily(multimap<vector<int>, string> families) {
     vector<int> largestFamily;
     int max = 0;
 
-    for (multimap<vector<int>,string>::iterator it = families.begin(), end = families.end(); it != end; it = families.upper_bound(it->first))
+    for (multimap<vector<int>,string>::iterator it = families.begin(), end = families.end(); it != end; it = families.upper_bound(it -> first))
       {
-        if (families.count(it->first) > max) {
-            max = families.count(it->first);
-            largestFamily = it->first;
+        if (families.count(it -> first) > max) {
+            max = families.count(it -> first);
+            largestFamily = it -> first;
         }
-
       }
 
     return largestFamily;
@@ -266,6 +282,7 @@ void game(string& currentWord, vector<int>& largestFamily, string& guessedLetter
 
 int main() {
     cout << "Welcome to Hangman." << endl;
+    /*
     unordered_multimap<int, string> dict;
     saveDictionary(dict);
     bool playAgain = true;
@@ -300,6 +317,17 @@ int main() {
             playAgain = false;
         }
     }
+    */
+    map<int, set<string>> dict;
+    saveDictionary(dict);
+    //set<string> set = {"hej", "hejsan"};
+
+    for (string word : dict[4]) {
+        cout << word << endl;
+    }
+    cout << dict[4].size();
+    cout << "done";
+
     return 0;
 }
 
