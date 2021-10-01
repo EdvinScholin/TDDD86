@@ -12,6 +12,7 @@
 #include <fstream>
 #include <vector>
 #include <set>
+#include <unordered_set>
 
 using namespace std;
 
@@ -21,37 +22,128 @@ const string ALPHABET  = "abcdefghijklmnopqrstuvwxyz";
  * Saves all the words in the english dictionary to an
  * unordered set.
  */
-void saveDictionary(map<int, set<string>>& dict) {
-    set<string> set;
-    //int length = 0;
+
+//void saveDictionary(unordered_map<int, set<string>>& dict) {
+////    set<string> set;
+////    string filename = "dictionary.txt";
+////    ifstream input;
+////    input.open(filename.c_str());
+////    string line;
+
+////    for (int len = 1; len < 46; len++) {        //inte generell
+////        set = {};
+////        ifstream input;
+////        input.open(filename.c_str());
+////        string line;
+////        while (getline(input, line)) {
+////            if(line.length() == len) {
+////                set.insert(line);
+////            }
+
+////        }
+////        dict.insert({len, set});
+////    }
+
+////    bool findmorewords = true; // dåligt namn men vem bryr sig
+////    int word_len = 1;
+////    while(findmorewords) {
+////        set = {};
+////        input.open(filename.c_str());
+////        while(getline(input, line)) {
+////            if(line.length() == word_len) {
+////                set.insert(line);
+////            }
+////        }
+
+////        word_len++;
+////    }
+////    input.close();
+
+//    string filename = "dictionary.txt";
+//    ifstream input;
+//    input.open(filename.c_str());
+//    string line;
+
+
+//    int word_len;
+//    unordered_set<pair<<string>, <int>>> set;
+//    while (getline(input, line)) {
+//        word_len = line.length();
+
+//    }
+
+
+//}
+
+
+//Funkar men kan säkert vara snabbare, använder just nu tre stycken sets, not good.
+// är också generell, funkar för alla dicts. Loopar också inte över filen mer än en gång, vilket jag tror man bara får.
+//void saveDictionary(unordered_map<int, unordered_set<string>>& dict) {
+//    unordered_set<int> word_lengths;
+//    unordered_set<string> set;
+//    string filename = "dictionary.txt";
+//    ifstream input;
+//    input.open(filename.c_str());
+//    string line;
+
+//    while (getline(input, line)) {
+//        if(word_lengths.find(line.length()) == word_lengths.end()) { //om den inte redan finns i word_lenghts lägg till.
+//            word_lengths.insert(line.length());
+//        }
+//        set.insert(line);
+//    }
+//    input.close();
+
+//    unordered_set<string> new_set;
+//    for(int len : word_lengths) {
+//        new_set = {};
+//        for (string word : set) {
+//            if(word.length() == len) {
+//                new_set.insert(word);
+//            }
+//        }
+//        dict.insert({len, new_set});
+//    }
+
+//}
+
+
+void saveDictionary(unordered_map<int, unordered_set<string>>& dict) {
     string filename = "dictionary.txt";
     ifstream input;
     input.open(filename.c_str());
-    string line;
+    string word;
 
-    for (int len = 1; len < 46; len++) {        //inte generell
-        set = {};
-        ifstream input;
-        input.open(filename.c_str());
-        string line;
-        while (getline(input, line)) {
-            if(line.length() == len) {
-                set.insert(line);
-            }
-
+    while (getline(input, word)) {
+        if(dict.find(word.length()) != dict.end()) { // om dict har en nyckel av längd 5 t.ex. så lägg till
+            dict[word.length()].insert(word);
         }
-        dict.insert({len, set});
+        else { // skapa ett set och lägg in ordet, lägg till i dict med word_len som nyckel.
+            dict.insert({word.length(), {word}});
+        }
     }
-    /*
-    while (getline(input, line)) {
+    input.close();
 
-        length = line.length();
-        pair.first = length;
-        pair.second = line;
-        dict.insert(pair);
-    }
-    */
 }
+
+
+//void saveDictionary(unordered_multimap<int, strlineing>& dict) {
+//    int length = 0;
+//    pair<int, string> pair;
+//    string filename = "dictionary.txt";
+//    ifstream input;nordered_set<string> set;
+//    input.open(filename.c_str());
+//    string line;
+
+//    while (getline(input, line)) {
+//        length = line.length();
+//        pair.first = length;
+//        pair.second = line;
+//        dict.insert(pair);
+//    }
+//}
+
+
 
 /*
  * User chooses a length for the word for which the user is going to
@@ -281,54 +373,55 @@ void game(string& currentWord, vector<int>& largestFamily, string& guessedLetter
 }
 
 int main() {
-    cout << "Welcome to Hangman." << endl;
-    /*
-    unordered_multimap<int, string> dict;
-    saveDictionary(dict);
-    bool playAgain = true;
-    string currentWord;
-    vector<int> largestFamily;
-    string guessedLetters;
-    int guesses;
-    int length;
-    vector<string> allWords;
-    bool gameOver;
-    bool showWordsLeft;
+//    cout << "Welcome to Hangman." << endl;
+//    unordered_multimap<int, string> dict;
+//    saveDictionary(dict);
+//    bool playAgain = true;
+//    string currentWord;
+//    vector<int> largestFamily;
+//    string guessedLetters;
+//    int guesses;
+//    int length;
+//    vector<string> allWords;
+//    bool gameOver;
+//    bool showWordsLeft;
 
-    while(playAgain) {
-        currentWord = "";
-        largestFamily = {};
-        guessedLetters = "";
-        guesses = 0;
-        length = 0;
-        allWords = allWordsGivenLength(dict, length);
-        guesses = askUserForGuesses();
-        gameOver = false;
-        showWordsLeft = askUserForInterface();
+//    while(playAgain) {
+//        currentWord = "";
+//        largestFamily = {};
+//        guessedLetters = "";
+//        guesses = 0;
+//        length = 0;
+//        allWords = allWordsGivenLength(dict, length);
+//        guesses = askUserForGuesses();
+//        gameOver = false;
+//        showWordsLeft = askUserForInterface();
 
-        while(!gameOver) {
-            game(currentWord, largestFamily, guessedLetters, guesses, allWords, length, gameOver, showWordsLeft);
-        }
+//        while(!gameOver) {
+//            game(currentWord, largestFamily, guessedLetters, guesses, allWords, length, gameOver, showWordsLeft);
+//        }
 
-        cout << "Do you want to play again? (y/n): ";
-        char answer;
-        cin >> answer;
-        if(answer == 'n') {
-            playAgain = false;
-        }
-    }
-    */
-    map<int, set<string>> dict;
+//        cout << "Do you want to play again? (y/n): ";
+//        char answer;
+//        cin >> answer;
+//        if(answer == 'n') {
+//            playAgain = false;
+//        }
+//    }
+
+
+    unordered_map<int, unordered_set<string>> dict;
     saveDictionary(dict);
     //set<string> set = {"hej", "hejsan"};
 
-    for (string word : dict[4]) {
-        cout << word << endl;
-    }
-    cout << dict[4].size();
-    cout << "done";
+//    for (string word : dict[4]) {
+//        cout << word << endl;
+//    }
+    cout << dict[4].size() << endl;
+    cout << "done" << endl;
 
     return 0;
+
 }
 
 
