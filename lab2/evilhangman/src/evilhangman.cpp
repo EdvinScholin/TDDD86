@@ -23,91 +23,6 @@ const string ALPHABET  = "abcdefghijklmnopqrstuvwxyz";
  * unordered set.
  */
 
-//void saveDictionary(unordered_map<int, set<string>>& dict) {
-////    set<string> set;
-////    string filename = "dictionary.txt";
-////    ifstream input;
-////    input.open(filename.c_str());
-////    string line;
-
-////    for (int len = 1; len < 46; len++) {        //inte generell
-////        set = {};
-////        ifstream input;
-////        input.open(filename.c_str());
-////        string line;
-////        while (getline(input, line)) {
-////            if(line.length() == len) {
-////                set.insert(line);
-////            }
-
-////        }
-////        dict.insert({len, set});
-////    }
-
-////    bool findmorewords = true; // dåligt namn men vem bryr sig
-////    int word_len = 1;
-////    while(findmorewords) {
-////        set = {};
-////        input.open(filename.c_str());
-////        while(getline(input, line)) {
-////            if(line.length() == word_len) {
-////                set.insert(line);
-////            }
-////        }
-
-////        word_len++;
-////    }
-////    input.close();
-
-//    string filename = "dictionary.txt";
-//    ifstream input;
-//    input.open(filename.c_str());
-//    string line;
-
-
-//    int word_len;
-//    unordered_set<pair<<string>, <int>>> set;
-//    while (getline(input, line)) {
-//        word_len = line.length();
-
-//    }
-
-
-//}
-
-
-//Funkar men kan säkert vara snabbare, använder just nu tre stycken sets, not good.
-// är också generell, funkar för alla dicts. Loopar också inte över filen mer än en gång, vilket jag tror man bara får.
-//void saveDictionary(unordered_map<int, unordered_set<string>>& dict) {
-//    unordered_set<int> word_lengths;
-//    unordered_set<string> set;
-//    string filename = "dictionary.txt";
-//    ifstream input;
-//    input.open(filename.c_str());
-//    string line;
-
-//    while (getline(input, line)) {
-//        if(word_lengths.find(line.length()) == word_lengths.end()) { //om den inte redan finns i word_lenghts lägg till.
-//            word_lengths.insert(line.length());
-//        }
-//        set.insert(line);
-//    }
-//    input.close();
-
-//    unordered_set<string> new_set;
-//    for(int len : word_lengths) {
-//        new_set = {};
-//        for (string word : set) {
-//            if(word.length() == len) {
-//                new_set.insert(word);
-//            }
-//        }
-//        dict.insert({len, new_set});
-//    }
-
-//}
-
-
 void saveDictionary(unordered_map<int, unordered_set<string>>& dict) {
     string filename = "dictionary.txt";
     ifstream input;
@@ -123,11 +38,10 @@ void saveDictionary(unordered_map<int, unordered_set<string>>& dict) {
         }
     }
     input.close();
-
 }
 
 
-//void saveDictionary(unordered_multimap<int, strlineing>& dict) {
+//void saveDictionary(unordered_multimap<int, string>& dict) {
 //    int length = 0;
 //    pair<int, string> pair;
 //    string filename = "dictionary.txt";
@@ -149,7 +63,7 @@ void saveDictionary(unordered_map<int, unordered_set<string>>& dict) {
  * User chooses a length for the word for which the user is going to
  * guess.
  */
-int askUserForLength(unordered_multimap<int, string> dict) {
+int askUserForLength(unordered_map<int, unordered_set<string>>& dict) {
     int length = 0;
 
     cout << "What length is your desired word? ";
@@ -157,7 +71,7 @@ int askUserForLength(unordered_multimap<int, string> dict) {
     cout << endl;
 
     if (dict.find(length) != dict.end()) {
-        cout << "Words with the length of " << length << " is " << dict.count(length) << endl;
+        cout << "Words with the length of " << length << " is " << dict[length].size() << endl;
     }
 
     else {
@@ -218,23 +132,23 @@ bool askUserForInterface() {
 /*
  * Calculates and returns all words given the length the user chooses.
  */
-vector<string> allWordsGivenLength(unordered_multimap<int, string> dict, int& length) {
-    vector<string> matchingWords;
-    length = askUserForLength(dict);
-    for (auto itr = dict.begin(); itr != dict.end(); itr++) {
-        if (itr -> first == length) {
-            string word = itr -> second;
-            matchingWords.insert(matchingWords.begin(), word);
-        }
-    }
-    return matchingWords;
-}
+//vector<string> allWordsGivenLength(unordered_multimap<int, string> dict, int& length) {
+//    vector<string> matchingWords;
+//    length = askUserForLength(dict);
+//    for (auto itr = dict.begin(); itr != dict.end(); itr++) {
+//        if (itr -> first == length) {
+//            string word = itr -> second;
+//            matchingWords.insert(matchingWords.begin(), word);
+//        }
+//    }
+//    return matchingWords;
+//}
 
 /*
  * User guesses a letter for the word and the method adds the guessed letter to
  * the string of guessed letters.
  */
-string askUserForALetter(string& guessedLetters) {
+char askUserForALetter(string& guessedLetters) {
     string letter;
     cout << "Guess a letter: ";
     cin >> letter;
@@ -249,7 +163,7 @@ string askUserForALetter(string& guessedLetters) {
     }
     cout << endl;
 
-    return letter;
+    return letter[0];
 }
 
 /*
@@ -257,20 +171,20 @@ string askUserForALetter(string& guessedLetters) {
  * decrement guesses for wrong guess and prints guesses left, guessed letters and the word with
  * lines and letters.
  */
-void gameInterface(string& currentWord, vector<int> largestFamily, string& guessedLetters, int& guesses, int& length) {
+void gameInterface(string& currentWord, vector<int>& largestFamilyKey, string& guessedLetters, int& guesses, int& length) {
     if (currentWord == "") {
         for (int i = 0; i < length; i++) {
             currentWord += '-';
         }
     }
 
-    else if (!largestFamily.empty()) {
-        for (int i : largestFamily) {
+    else if (!largestFamilyKey.empty()) {
+        for (int i : largestFamilyKey) {
             currentWord[i] = guessedLetters[guessedLetters.length()-1];
         }
     }
 
-    else if (largestFamily.empty()) {
+    else if (largestFamilyKey.empty()) {
         guesses--;
     }
 
@@ -290,78 +204,135 @@ void gameInterface(string& currentWord, vector<int> largestFamily, string& guess
  * Checks what type of families the guess generates. A multimap is created with the
  * type as key and the word of that type as value. The multimap is then returned.
  */
-multimap<vector<int>, string> checkFamilies(vector<string> matchingWords, char letter) {
-    multimap<vector<int>, string> families;
-    for (string word : matchingWords) {
+//multimap<vector<int>, string> checkFamilies(vector<string> matchingWords, char letter) {
+//    multimap<vector<int>, string> families;
+//    for (string word : matchingWords) {
+//        vector<int> matchingPos;
+//        for (int i=0; i < word.size(); i++) {
+//            if (word[i] == letter) {
+//                matchingPos.push_back(i);
+//            }
+//        }
+//        pair<vector<int>, string> myPair;
+//        myPair.first = matchingPos;
+//        myPair.second = word;
+//        families.insert(myPair);
+//    }
+//    return families;
+//}
+
+void checkFamilies(unordered_set<string>& largestFamily, char letter, unordered_map<vector<int>, unordered_set<string>>& families) {
+    families = {{},{}}; //kanske är fel <------
+    for (string word : largestFamily) {
         vector<int> matchingPos;
         for (int i=0; i < word.size(); i++) {
-            if (word[i] == letter) {
+           if (word[i] == letter) {
                 matchingPos.push_back(i);
-            }
+           }
         }
-        pair<vector<int>, string> myPair;
-        myPair.first = matchingPos;
-        myPair.second = word;
-        families.insert(myPair);
+        if(families.find(matchingPos) != families.end()) {
+            families[matchingPos].insert(word);
+        }
+        else {
+            families.insert({matchingPos, {word}});
+        }
+
     }
-    return families;
 }
 
 /*
  * Returns the family that has the most occurences in the multimap with different types of
  * families.
  */
-vector<int> checkMostCommonFamily(multimap<vector<int>, string> families) {
-    vector<int> largestFamily;
+//vector<int> checkMostCommonFamily(multimap<vector<int>, string> families) {
+//    vector<int> largestFamily;
+//    int max = 0;
+
+//    for (multimap<vector<int>,string>::iterator it = families.begin(), end = families.end(); it != end; it = families.upper_bound(it -> first))
+//      {
+//        if (families.count(it -> first) > max) {
+//            max = families.count(it -> first);
+//            largestFamily = it -> first;
+//        }
+//      }
+
+//    return largestFamily;
+//}
+
+void checkMostCommonFamily(unordered_map<vector<int>, unordered_set<string>>& families, unordered_set<string>& largestFamily, vector<int>& largestFamilyKey) {
     int max = 0;
-
-    for (multimap<vector<int>,string>::iterator it = families.begin(), end = families.end(); it != end; it = families.upper_bound(it -> first))
-      {
-        if (families.count(it -> first) > max) {
-            max = families.count(it -> first);
-            largestFamily = it -> first;
+    largestFamily = {};
+    for (pair<vector<int>, unordered_set<string>> family : families) {
+        if (family.second.size() > max) {
+            max = family.second.size();
+            largestFamily = family.second;
+            largestFamilyKey = family.first;
         }
-      }
-
-    return largestFamily;
+    }
 }
 
 /*
  * Adds the words of the largest family to a vector.
  */
-vector<string> retrieveMostCommonFamily(multimap<vector<int>, string> families, vector<int> largestFamily) {
-    vector<string> wordsLeft;
+//vector<string> retrieveMostCommonFamily(multimap<vector<int>, string> families, vector<int> largestFamily) {
+//    vector<string> wordsLeft;
 
-    for (auto it = families.begin(); it != families.end(); it++) {
-        if(it -> first == largestFamily) {
-            wordsLeft.push_back(it -> second);
-        }
-    }
+//    for (auto it = families.begin(); it != families.end(); it++) {
+//        if(it -> first == largestFamily) {
+//            wordsLeft.push_back(it -> second);
+//        }
+//    }
 
-    return wordsLeft;
-}
+//    return wordsLeft;
+//}
 
 /*
  * Generates the user interface and checks whether the user has won or lost to
  * the computer. Otherwise the method calls all necessary methods for the game
  * to continue. The method also shows all words if the user has allowed it.
  */
-void game(string& currentWord, vector<int>& largestFamily, string& guessedLetters, int& guesses, vector<string>& allWords, int length,
-          bool& gameOver, bool showWordsLeft) {
-    gameInterface(currentWord, largestFamily, guessedLetters, guesses, length);
+//void game(string& currentWord, vector<int>& largestFamily, string& guessedLetters, int& guesses, vector<string>& allWords, int length,
+//          bool& gameOver, bool showWordsLeft) {
+//    gameInterface(currentWord, largestFamily, guessedLetters, guesses, length);
 
+//    if (guesses > 0) {
+//        if (currentWord.find('-') == string::npos) {
+//            gameOver = true;
+//            cout << "Congratulations! YOU WON!!!" << endl;
+//        }
+//        else {
+//            char letter = askUserForALetter(guessedLetters)[0];
+//            multimap<vector<int>, string> families = checkFamilies(allWords, letter);
+//            largestFamily = checkMostCommonFamily(families);
+//            allWords = retrieveMostCommonFamily(families, largestFamily);
+//            if(showWordsLeft == true) {
+//                cout << "Words left: " << allWords.size() << endl;
+//            }
+//        }
+//    }
+
+//    else {
+//        gameOver = true;
+//        cout << "Congratualtions! You lost!" << endl;
+//    }
+//}
+
+
+void game(string& currentWord, string& guessedLetters, int& guesses, unordered_set<string>& largestFamily, bool& gameOver, bool showWordsLeft,
+          unordered_map<vector<int>, unordered_set<string>>& families, vector<int>& largestFamilyKey, int length) {
+    //gameInterface(currentWord, largestFamily, guessedLetters, guesses, length);
+    gameInterface(currentWord, largestFamilyKey, guessedLetters, guesses, length);
     if (guesses > 0) {
         if (currentWord.find('-') == string::npos) {
             gameOver = true;
             cout << "Congratulations! YOU WON!!!" << endl;
         }
         else {
-            char letter = askUserForALetter(guessedLetters)[0];
-            multimap<vector<int>, string> families = checkFamilies(allWords, letter);
-            largestFamily = checkMostCommonFamily(families);
-            allWords = retrieveMostCommonFamily(families, largestFamily);
-            if(showWordsLeft == true) {
-                cout << "Words left: " << allWords.size() << endl;
+            char letter = askUserForALetter(guessedLetters);
+            checkFamilies(largestFamily, letter, families); //edits families
+            checkMostCommonFamily(families, largestFamily, largestFamilyKey);
+            if (showWordsLeft == true) {
+                cout << "Words left: " << largestFamily.size() << endl;
             }
         }
     }
@@ -408,19 +379,44 @@ int main() {
 //            playAgain = false;
 //        }
 //    }
-
-
+    cout << "Welcome to Hangman." << endl;
     unordered_map<int, unordered_set<string>> dict;
     saveDictionary(dict);
-    //set<string> set = {"hej", "hejsan"};
+    bool playAgain = true;
+    string currentWord;
+    unordered_set<string> largestFamily;
+    vector<int> largestFamilyKey;
+    unordered_map<vector<int>, unordered_set<string>> families; //problem med init tror vi
+    string guessedLetters;
+    int guesses;
+    int length;
+    bool gameOver;
+    bool showWordsLeft;
+    while(playAgain) {
+        currentWord = "";
+        //families = {{}, {}};
+        largestFamilyKey = {};
+        length = askUserForLength(dict);
+        largestFamily = dict[length];
+        guessedLetters = "";
+        guesses = 0;
+        //allWords = allWordsGivenLength(dict, length);
+        guesses = askUserForGuesses();
+        gameOver = false;
+        showWordsLeft = askUserForInterface();
 
-//    for (string word : dict[4]) {
-//        cout << word << endl;
-//    }
-    cout << dict[4].size() << endl;
-    cout << "done" << endl;
+        while(!gameOver) {
+             game(currentWord, guessedLetters, guesses, largestFamily, gameOver, showWordsLeft, families, largestFamilyKey, length);
+        }
 
-    return 0;
+        cout << "Do you want to play again? (y/n): ";
+        char answer;
+        cin >> answer;
+        if(answer == 'n') {
+            playAgain = false;
+        }
+    }
+
 
 }
 
