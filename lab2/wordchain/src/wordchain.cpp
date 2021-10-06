@@ -42,18 +42,18 @@ void askUserForTwoWords(string& str1, string& str2) {
 /*
  * Creates a minimal word chain from a start word to an end word.
  */
-void wordChain(string& w1, string& w2, unordered_set<string>& dict) {
+void wordChain(string& w1, string& w2, unordered_set<string> const& dict) {
     queue<stack<string>> q;
     stack<string> chain_stack;
-    unordered_set<string> neighbours;
+    unordered_set<string> neighbours;           //save previous neighboring words
     chain_stack.push(w1);
-    q.push(chain_stack);
+    q.push(chain_stack);                        //create/add a stack containing {w1} to the queue
 
-    while (!q.empty()) {
+    while (!q.empty()) {                        //the queue is not empty
         chain_stack = q.front();
-        q.pop();
-        if (chain_stack.top() == w2) {
-            while (!chain_stack.empty()) {
+        q.pop();                                //dequeue the partial-chain stack from the front of the queue
+        if (chain_stack.top() == w2) {          //if the word at the top of the stack is the destinaction word
+            while (!chain_stack.empty()) {      //output the elements of the stack as the solution
                 cout << chain_stack.top() << " ";
                 chain_stack.pop();
             }
@@ -62,16 +62,16 @@ void wordChain(string& w1, string& w2, unordered_set<string>& dict) {
         else {
             int length = chain_stack.top().length();
             for (int i = 0; i < length; i++) {
-                string temp_word = chain_stack.top();
-                for (char letter : ALPHABET) {
+                string temp_word = chain_stack.top();                           //get next word in chain
+                for (char letter : ALPHABET) {                                  //iterate through every possible neighbour word
                     temp_word[i] = letter;
 
-                    if (dict.find(temp_word) != dict.end()) {
-                        if (neighbours.find(temp_word) == neighbours.end()) {
-                            stack<string> copy_stack = chain_stack;
-                            neighbours.insert(temp_word);
-                            copy_stack.push(temp_word);
-                            q.push(copy_stack);
+                    if (dict.find(temp_word) != dict.end()) {                   //if that neighbour is a valid English word
+                        if (neighbours.find(temp_word) == neighbours.end()) {   //if that neighbour word has not already been used in a ladder before
+                            stack<string> copy_stack = chain_stack;             //create a copy of the current chain stack
+                            neighbours.insert(temp_word);                       //ensure neighbour word is not used again
+                            copy_stack.push(temp_word);                         //put the neighbour word at the top of the copy stack
+                            q.push(copy_stack);                                 //add the copy stack to the end of the queue
                         }
                     }
                 }

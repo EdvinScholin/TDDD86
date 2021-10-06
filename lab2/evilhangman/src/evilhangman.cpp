@@ -45,12 +45,12 @@ void askUserForLength(unordered_map<int, unordered_set<string>> const& dict, int
     cout << endl;
 
     for (char const&c : input) {
-        if (isdigit(c) == false) {
+        if (!isdigit(c)) {
             isNumber = false;
         }
     }
 
-    if (isNumber == true) {
+    if (isNumber) {
         length = stoi(input);
         if (dict.find(length) != dict.end()) {
             cout << "Words with the length of " << length << " is " << dict.at(length).size() << endl;
@@ -80,12 +80,12 @@ void askUserForGuesses(int& guesses) {
     cout << endl;
 
     for (char const&c : input) {
-        if (isdigit(c) == false) {
+        if (!isdigit(c)) {
             isNumber = false;
         }
     }
 
-    if (isNumber == true) {
+    if (isNumber) {
         if (stoi(input) > 0) {
             guesses = stoi(input);
         }
@@ -160,7 +160,7 @@ void gameInterface(string& currentWord, vector<int> const& largestFamilyKey, str
     }
 
     else if (!largestFamilyKey.empty()) {
-        for (int i : largestFamilyKey) {
+        for (int const& i : largestFamilyKey) {
             currentWord[i] = guessedLetters[guessedLetters.length()-1];
         }
     }
@@ -229,7 +229,7 @@ void game(string& currentWord, string& guessedLetters, int& guesses, unordered_s
             askUserForALetter(guessedLetters, letter);
             checkFamilies(largestFamily, letter, families);
             checkMostCommonFamily(families, largestFamily, largestFamilyKey);
-            if (showWordsLeft == true) {
+            if (showWordsLeft) {
                 cout << "Words left: " << largestFamily.size() << endl;
             }
         }
