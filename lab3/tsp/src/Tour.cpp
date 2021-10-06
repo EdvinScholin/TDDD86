@@ -16,14 +16,22 @@ Tour::Tour()
 
 Tour::Tour(Point a, Point b, Point c, Point d)
 {
-    Node* npoint1 = nullptr;
 
-    Node node1(a, npoint1);
-    Node node2(b, nullptr);
-    Node node3(c, nullptr);
-    Node node4(d, nullptr);
+    Node* node1 = new Node(a, nullptr);
+    Node* node2 = new Node(b, nullptr);
+    Node* node3 = new Node(c, nullptr);
+    Node* node4 = new Node(d, nullptr);
 
-    npoint1 = &node2;
+    delete node1;
+    node1 = new Node(a, node2);
+    delete node2;
+    node2 = new Node(b, node3);
+    delete node3;
+    node3 = new Node(c, node4);
+    delete node4;
+    node4 = new Node(d, node1);
+
+    first_Node = node1;
 }
 
 Tour::~Tour()
@@ -33,6 +41,13 @@ Tour::~Tour()
 
 void Tour::show()
 {
+    Node* node = first_Node;
+
+    for (int i = 0; i < 4; i++) {
+        cout << node->toString() << endl;
+        node = node->next;
+    }
+
     // TODO: write this member
 }
 
