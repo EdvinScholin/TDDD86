@@ -16,22 +16,53 @@ Tour::Tour()
 
 Tour::Tour(Point a, Point b, Point c, Point d)
 {
+        //följande kod fungerar alldeles utmärkt.
+        Node* node1 = new Node(a, nullptr);
+        Node* node2 = new Node(b, nullptr);
+        Node* node3 = new Node(c, nullptr);
+        Node* node4 = new Node(d, nullptr);
 
-    Node* node1 = new Node(a, nullptr);
-    Node* node2 = new Node(b, nullptr);
-    Node* node3 = new Node(c, nullptr);
-    Node* node4 = new Node(d, nullptr);
+        node1->next = node2;
+        node2->next = node3;
+        node3->next = node4;
+        node4->next = node1;
 
-    delete node1;
-    node1 = new Node(a, node2);
-    delete node2;
-    node2 = new Node(b, node3);
-    delete node3;
-    node3 = new Node(c, node4);
-    delete node4;
-    node4 = new Node(d, node1);
+        first_Node = node1;
 
-    first_Node = node1;
+
+
+//    Node* node1 = new Node(a, nullptr);
+//    Node* node2 = new Node(b, nullptr);
+//    Node* node3 = new Node(c, nullptr);
+//    Node* node4 = new Node(d, nullptr);
+
+//    node1->next = node2;
+//    node2->next = node3;
+//    node3->next = node4;
+//    node4->next = node1;
+
+//    first_Node = node1;
+
+
+
+
+
+
+//    Node* node1 = nullptr; //new Node(a, nullptr);
+//    Node* node2 = nullptr;//new Node(b, nullptr);
+//    Node* node3 = nullptr; //new Node(c, nullptr);
+//    Node* node4 = nullptr; //new Node(d, nullptr);
+
+//    delete node1;
+//    node1 = new Node(a, node2);
+//    delete node2;
+//    node2 = new Node(b, node3);
+//    delete node3;
+//    node3 = new Node(c, node4);
+//    delete node4;
+//    node4 = new Node(d, node1);
+
+//    first_Node = node1;
 }
 
 Tour::~Tour()
@@ -41,12 +72,23 @@ Tour::~Tour()
 
 void Tour::show()
 {
-    Node* node = first_Node;
+    Node* current = first_Node;
+    while (current != nullptr) {
+        cout << current->toString() << endl;
+        current = current->next; // move to the next node
+        if (current == first_Node) {
+            break;                      //tror inte dom gillar detta men men
+        }
 
-    for (int i = 0; i < 4; i++) {
-        cout << node->toString() << endl;
-        node = node->next;
     }
+
+
+//    Node* node = first_Node;
+
+//    for (int i = 0; i < 4; i++) {
+//        cout << node->toString() << endl;
+//        node = node->next;
+//    }
 
     // TODO: write this member
 }
@@ -58,11 +100,37 @@ void Tour::draw(QGraphicsScene *scene)
 
 int Tour::size()
 {
+    Node* current = first_Node;
+    int count = 0;
+    while (current != nullptr) {
+        count++;
+        current = current->next; // move to the next node
+        if (current == first_Node) {
+            break;                      //tror inte dom gillar detta men men
+        }
+    }
+    cout << "Number of points on tour: " << count;
+
+
+
     // TODO: write this member
 }
 
 double Tour::distance()
 {
+    Node* current = first_Node;
+    int total_distance = 0;
+    while (current != nullptr) {
+        total_distance += current->point.distanceTo(current->next->point);
+        current = current->next; // move to the next node
+        if (current == first_Node) {
+            break;                      //tror inte dom gillar detta men men
+        }
+    }
+    cout << "Total distance of tour: " << total_distance;
+
+
+
     // TODO: write this member
 }
 

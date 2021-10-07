@@ -71,5 +71,11 @@ int main(int argc, char *argv[]) {
     // The constructor should link p->q->r->s->p
     Tour squareTour(p, q, r, s);
     // Output the Tour
-    squareTour.show();
+    //squareTour.show();
+    // Output size of tour
+    //squareTour.size();
+    // Output total distance of tour:
+    squareTour.distance();
+    cout << endl;
+    cout << "\nPROGRAM DONE\n";
 }
