@@ -16,25 +16,25 @@
 #include "Tour.h"
 
 int main(int argc, char *argv[]) {
-//    QApplication a(argc, argv);
+    QApplication a(argc, argv);
 
-//    string filename = "tsp10.txt";
-//    ifstream input;
-//    input.open(filename);
+    string filename = "tsp10.txt";
+    ifstream input;
+    input.open(filename);
 
-//    // get dimensions
-//    int width;
-//    int height;
-//    input >> width;
-//    input >> height;
+    // get dimensions
+    int width;
+    int height;
+    input >> width;
+    input >> height;
 
-//    // setup graphical window
-//    QGraphicsView *view = new QGraphicsView();
-//    QGraphicsScene *scene = new QGraphicsScene();
-//    view->setScene(scene);
-//    view->scale(1, -1); //screen y-axis is inverted
-//    view->setSceneRect(0, 0, width, height);
-//    view->show();
+    // setup graphical window
+    QGraphicsView *view = new QGraphicsView();
+    QGraphicsScene *scene = new QGraphicsScene();
+    view->setScene(scene);
+    view->scale(1, -1); //screen y-axis is inverted
+    view->setSceneRect(0, 0, width, height);
+    view->show();
 
 //    // run insertion heuristic
 //    Tour tour;
@@ -75,7 +75,16 @@ int main(int argc, char *argv[]) {
     // Output size of tour
     //squareTour.size();
     // Output total distance of tour:
-    squareTour.distance();
+    //squareTour.distance();
+
+
+
+//    Point h(450.0, 450.0);
+//    squareTour.insertNearest(h);
+//    squareTour.show();
+//    squareTour.draw(scene);
+//    return a.exec(); // start Qt event loop
+
     cout << endl;
     cout << "\nPROGRAM DONE\n";
 }
