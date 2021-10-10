@@ -44,7 +44,7 @@ void askUserForLength(unordered_map<int, unordered_set<string>> const& dict, int
     cin >> input;
     cout << endl;
 
-    for (char const&c : input) {
+    for (char const& c : input) {
         if (!isdigit(c)) {
             isNumber = false;
         }
@@ -79,7 +79,7 @@ void askUserForGuesses(int& guesses) {
     cin >> input;
     cout << endl;
 
-    for (char const&c : input) {
+    for (char const& c : input) {
         if (!isdigit(c)) {
             isNumber = false;
         }
