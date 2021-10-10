@@ -39,20 +39,34 @@ Tour::Tour(Point a, Point b, Point c, Point d)
 
 Tour::~Tour()
 {
-    Node* current = first_Node;
-    set<Node*> set;
 
-    while (current != nullptr) {
-        set.insert(current);
-        current = current->next;
-        if (current == first_Node) {
-            break;                      //tror inte dom gillar detta men men
+    Node* current = first_Node;
+    Node* temp_node = nullptr;
+
+    while(current != nullptr) {
+        temp_node = current->next;
+        delete current;
+        current = temp_node;
+
+        if(current == first_Node) {
+            break;
         }
     }
 
-    for (Node* node : set) {
-        delete node;
-    }
+//    Node* current = first_Node;
+//    set<Node*> set;
+
+//    while (current != nullptr) {
+//        set.insert(current);
+//        current = current->next;
+//        if (current == first_Node) {
+//            break;                      //tror inte dom gillar detta men men
+//        }
+//    }
+
+//    for (Node* node : set) {
+//        delete node;
+//    }
 
 
     // TODO: write this member
@@ -166,37 +180,40 @@ void Tour::insertNearest(Point p)
 
 void Tour::insertSmallest(Point p)
 {
-    // TODO: write this member
     if(first_Node == nullptr) {
         Node* node1 = new Node(p, nullptr);
         node1->next = node1;
         first_Node = node1;
     }
-    else
-    {
-        Node* current = first_Node->next;
-        //Node* closestNode = nullptr;
-        map<int, set<Node*>> possibleTours; //map of distance of tour and tours
-        set<Node*> currentNodes;
+    else {
+        Node* current = first_Node;
+        Node* bestNode = nullptr;
+        int shortestDistanceIncrease = numeric_limits<int>::max();
+        int startingDistance = 0;
+        int distanceIncrease = 0;
+        int d1 = 0;
+        int d2 = 0;
 
-        while(current != first_Node) {      //should make a set containing copies of all nodes.
-            Node* node = new Node(current->point, current->next);
-            currentNodes.insert(node);
-            current = current->next;
-        }
-        set<Node*> currentNodesCopy = currentNodes;
+        while(current != nullptr) {
+            startingDistance = current->point.distanceTo(current->next->point); //Point A->B starting distance.
+            d1 = current->point.distanceTo(p); //distance between point A and P.
+            d2 = current->next->point.distanceTo(p); //distance between point P and B.
+            distanceIncrease = d1 + d2 - startingDistance;
 
-        //current = first_Node;
-        for(int i; i < currentNodesCopy.size(); i++) //to test all possible positions
-        {
-            current = first_Node;
-            for(int ii = 0; ii < i; ii++) {     //move pointer
-                current = current->next;
+            if (distanceIncrease < shortestDistanceIncrease) {
+                shortestDistanceIncrease = distanceIncrease;
+                bestNode = current;
             }
-            Node* newNode = new Node(p, current->next);
-            current->next = newNode;
-            possibleTours.insert({})            //funkar inte ska egentligen skapa ett tour objekt.
+            current = current->next;
+
+            if (current == first_Node)
+            {
+                break;
+            }
         }
+
+        Node* newNode = new Node(p, bestNode->next); //insert node that results in shortest tour distance increase.
+        bestNode->next = newNode;
 
     }
 }
