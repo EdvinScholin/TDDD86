@@ -1,26 +1,21 @@
-// This is the .cpp file you will edit and turn in.
-// We have provided a skeleton for you,
-// but you must finish it as described in the spec.
-// Also remove these comments here and add your own.
-// TODO: remove this comment header
+/*
+ * This assignment was made by Wilmer Segerstedt (wilse150) and Edvin Schölin (edvsc779).
+ * This file contains the code implementation of the Tour class.
+ * See Tour.h for comments about each member.
+ */
 
 #include <iostream>
 #include "Tour.h"
 #include "Node.h"
 #include "Point.h"
-#include <set>
-#include <map>
 
 Tour::Tour()
 {
     first_Node = nullptr;
-
-    // TODO: write this member
 }
 
-Tour::Tour(Point a, Point b, Point c, Point d)
+Tour::Tour(Point const& a, Point const& b, Point const& c, Point const& d)
 {
-        //följande kod fungerar alldeles utmärkt.
         Node* node1 = new Node(a, nullptr);
         Node* node2 = new Node(b, nullptr);
         Node* node3 = new Node(c, nullptr);
@@ -34,117 +29,86 @@ Tour::Tour(Point a, Point b, Point c, Point d)
         first_Node = node1;
 }
 
-
-
-
 Tour::~Tour()
 {
 
     Node* current = first_Node;
     Node* temp_node = nullptr;
 
-    while(current != nullptr) {
+    while (current != nullptr) {
         temp_node = current->next;
         delete current;
         current = temp_node;
 
-        if(current == first_Node) {
+        if (current == first_Node) {
             break;
         }
     }
-
-//    Node* current = first_Node;
-//    set<Node*> set;
-
-//    while (current != nullptr) {
-//        set.insert(current);
-//        current = current->next;
-//        if (current == first_Node) {
-//            break;                      //tror inte dom gillar detta men men
-//        }
-//    }
-
-//    for (Node* node : set) {
-//        delete node;
-//    }
-
-
-    // TODO: write this member
 }
 
-void Tour::show()
+void Tour::show() const
 {
     Node* current = first_Node;
 
     while (current != nullptr) {
         cout << current->toString() << endl;
-        current = current->next;        // move to the next node
+        current = current->next;
 
         if (current == first_Node) {
-            break;                      //tror inte dom gillar detta men men
+            break;
         }
     }
-
-    // TODO: write this member
 }
 
-void Tour::draw(QGraphicsScene *scene)
+void Tour::draw(QGraphicsScene *scene) const
 {
     Node* current = first_Node;
 
     while (current != nullptr) {
         current->point.drawTo(current->next->point, scene);
-        current = current->next;        // move to the next node
+        current = current->next;
 
         if (current == first_Node) {
-            break;                      //tror inte dom gillar detta men men
+            break;
         }
     }
-    // TODO: write this member
 }
 
-int Tour::size()
+int Tour::size() const
 {
     Node* current = first_Node;
     int count = 0;
 
     while (current != nullptr) {
         count++;
-        current = current->next; // move to the next node
+        current = current->next;
 
         if (current == first_Node) {
-            break;                      //tror inte dom gillar detta men men
+            break;
         }
     }
-    //cout << "Number of points on tour: " << count;
-
 
     return count;
-    // TODO: write this member
 }
 
-double Tour::distance()
+double Tour::distance() const
 {
     Node* current = first_Node;
-    int total_distance = 0;
+    double total_distance = 0;
     while (current != nullptr) {
-        total_distance += current->point.distanceTo(current->next->point);
-        current = current->next; // move to the next node
+        total_distance += current->point.distanceTo(current->next->point); // Add the distance between current point to next point
+        current = current->next;
         if (current == first_Node) {
-            break;                      //tror inte dom gillar detta men men
+            break;
         }
     }
-    //cout << "Total distance of tour: " << total_distance;
 
     return total_distance;
-
-
-    // TODO: write this member
 }
 
-void Tour::insertNearest(Point p)
+void Tour::insertNearest(Point const& p)
 {
-    if(first_Node == nullptr) {
+    if (first_Node == nullptr) {
         Node* node1 = new Node(p, nullptr);
         node1->next = node1;
         first_Node = node1;
@@ -153,11 +117,11 @@ void Tour::insertNearest(Point p)
     {
         Node* current = first_Node;
         Node* closestNode = nullptr;
-        int closestDistance = numeric_limits<int>::max();
+        double closestDistance = numeric_limits<double>::max();
 
         while (current != nullptr) {
-            if (current->point.distanceTo(p) < closestDistance) {
-                closestNode = current; //är rädd att closestnode också ändras när current ändras. Pekare pekar på pekare?
+            if (current->point.distanceTo(p) < closestDistance) { // If there is a closer distance, we set a new closest node and closest distance
+                closestNode = current;
                 closestDistance = current->point.distanceTo(p);
             }
             current = current->next;
@@ -168,17 +132,12 @@ void Tour::insertNearest(Point p)
             }
         }
 
-        Node* newNode = new Node(p, closestNode->next);
+        Node* newNode = new Node(p, closestNode->next); // Insert the node at the nearest node
         closestNode->next = newNode;
-
-        //cout << "Closest node to p:_ " << closestNode->toString() << endl;;
     }
-
-
-    // TODO: write this member
 }
 
-void Tour::insertSmallest(Point p)
+void Tour::insertSmallest(Point const& p)
 {
     if(first_Node == nullptr) {
         Node* node1 = new Node(p, nullptr);
@@ -188,16 +147,16 @@ void Tour::insertSmallest(Point p)
     else {
         Node* current = first_Node;
         Node* bestNode = nullptr;
-        int shortestDistanceIncrease = numeric_limits<int>::max();
-        int startingDistance = 0;
-        int distanceIncrease = 0;
-        int d1 = 0;
-        int d2 = 0;
+        double shortestDistanceIncrease = numeric_limits<double>::max();
+        double startingDistance = 0;
+        double distanceIncrease = 0;
+        double d1 = 0;
+        double d2 = 0;
 
-        while(current != nullptr) {
-            startingDistance = current->point.distanceTo(current->next->point); //Point A->B starting distance.
-            d1 = current->point.distanceTo(p); //distance between point A and P.
-            d2 = current->next->point.distanceTo(p); //distance between point P and B.
+        while (current != nullptr) {
+            startingDistance = current->point.distanceTo(current->next->point); // Point A->B starting distance.
+            d1 = current->point.distanceTo(p);                                  // distance between point A and P.
+            d2 = current->next->point.distanceTo(p);                            // distance between point P and B.
             distanceIncrease = d1 + d2 - startingDistance;
 
             if (distanceIncrease < shortestDistanceIncrease) {
@@ -214,6 +173,5 @@ void Tour::insertSmallest(Point p)
 
         Node* newNode = new Node(p, bestNode->next); //insert node that results in shortest tour distance increase.
         bestNode->next = newNode;
-
     }
 }

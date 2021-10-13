@@ -18,7 +18,7 @@
 int main(int argc, char *argv[]) {
 //    QApplication a(argc, argv);
 
-//    string filename = "tsp10.txt";
+//    string filename = "tsp1000.txt";
 //    ifstream input;
 //    input.open(filename);
 
@@ -44,10 +44,10 @@ int main(int argc, char *argv[]) {
 //        Point p(x, y);
 //        tour.insertSmallest(p);
 //        //uncomment the 4 lines below to animate
-//        tour.draw(scene);
-//        std::chrono::milliseconds dura(50);
-//        std::this_thread::sleep_for(dura);
-//        a.processEvents();
+////        tour.draw(scene);
+////        std::chrono::milliseconds dura(50);
+////        std::this_thread::sleep_for(dura);
+////        a.processEvents();
 //    }
 //    input.close();
 
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
     Tour squareTour(p, q, r, s);
     // Output the Tour
     Point c(150, 150);
-    squareTour.insertSmallest(c);
+    squareTour.insertNearest(c);
     squareTour.show();
     // Output size of tour
     squareTour.size();
