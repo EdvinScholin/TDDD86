@@ -6,6 +6,10 @@
 #include "Robot.h"
 #include "constants.h"
 
+Robot::Robot() {
+
+}
+
 bool Robot::canMove() const{
     return !crashed;
 }

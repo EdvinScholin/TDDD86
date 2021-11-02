@@ -6,8 +6,17 @@
 #include "Junk.h"
 #include "constants.h"
 
+void Junk::moveTowards(const Unit &u) {}
 
+bool Junk::canMove() const {
+    return false;
+}
 
+void Junk::doCrash() {}
+
+bool Junk::justCrashed() const {
+    return false;
+}
 
 void Junk::draw(QGraphicsScene *scene) const {
     Point corner = asPoint();

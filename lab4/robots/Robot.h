@@ -13,6 +13,9 @@ class Robot : public Unit {
     bool crashed = false;
 
 public:
+    Robot();
+
+    Robot(const Point& p): Unit(p){}
 
     /*
      * did not crash yet

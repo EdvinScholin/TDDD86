@@ -12,11 +12,12 @@
 
 GameState::GameState(int numberOfRobots) {
    for (int i = 0; i < numberOfRobots; i++) {
-        Robot robot;
-        while(!isEmpty(robot)){
-            robot = Robot();
-        }
-        robots.push_back(robot);
+//        Robot robot;
+//        while(!isEmpty(robot)){
+//            robot = Robot();
+//        }
+       Robot* robot = new Robot();
+       robots.push_back(robot);
     }
     teleportHero();
 }
@@ -24,10 +25,12 @@ GameState::GameState(int numberOfRobots) {
 void GameState::draw(QGraphicsScene *scene) const {
     scene->clear();
     hero.draw(scene);
-    for (const Robot& robot: robots)
-        robot.draw(scene);
-    for (const Junk& junk: junks)
-        junk.draw(scene);
+    for (const Robot* robot: robots) {
+        robot->draw(scene);
+
+    }
+//    for (const Junk& junk: junks) // Kommer inte behövas
+//        junk.draw(scene);
 }
 
 void GameState::teleportHero() {
@@ -36,22 +39,22 @@ void GameState::teleportHero() {
 }
 
 void GameState::moveRobots() {
-    for(Robot& robot: robots)
-        robot.moveTowards(hero);
+    for(Robot* robot: robots)
+        robot->moveTowards(hero);
 }
 
 
 void GameState::updateCrashes() {
     for(unsigned i=0; i < robots.size(); ++i){
-        for(unsigned j=0; j < junks.size(); ++j){
-            if(robots[i].at(junks[j])){
-                robots[i].doCrash();
-            }
-        }
+//        for(unsigned j=0; j < junks.size(); ++j){
+//            if(robots[i].at(junks[j])){
+//                robots[i].doCrash();  // Kommer ej behövas
+//            }
+//        }
         for(unsigned o=i+1; o < robots.size(); ++o){
-            if(robots[i].at(robots[o])){
-                robots[i].doCrash();
-                robots[o].doCrash();
+            if(robots[i]->at(Robot(robots[o]->asPoint()))){ // Kan man göra så här??
+                robots[i]->doCrash();
+                robots[o]->doCrash();
             }
         }
     }
@@ -68,7 +71,8 @@ int GameState::countJustCrashed()const{
 void GameState::junkTheCrashed(){
     for(unsigned i=0; i < robots.size(); ++i){
         if (robots[i].justCrashed()) {
-            junks.push_back(Junk(robots[i].asPoint()));
+            //junks.push_back(Junk(robots[i].asPoint()));
+            robots.push_back(Junk(robots[i].asPoint()));
             robots[i] = robots[robots.size()-1];
             robots.pop_back();
         }
@@ -89,11 +93,11 @@ bool GameState::heroDead() const {
             return true;
         }
     }
-    for(const Junk& junk: junks){
-        if(hero.at(junk)){
-            return true;
-        }
-    }
+//    for(const Junk& junk: junks){
+//        if(hero.at(junk)){
+//            return true;
+//        }
+//    }
     return false;
 }
 
@@ -111,9 +115,9 @@ bool GameState::isEmpty(const Unit& unit) const {
     for(const Robot& robot: robots)
         if(robot.at(unit))
             return false;
-    for(const Junk& junk: junks)
-        if(junk.at(unit))
-            return false;
+//    for(const Junk& junk: junks)
+//        if(junk.at(unit))
+//            return false;
     return true;
 }
 

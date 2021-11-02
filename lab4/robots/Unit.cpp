@@ -57,3 +57,7 @@ void Unit::checkBounds() {
     if (y < MIN_Y) y = MIN_Y;
     if (y > MAX_Y) y = MAX_Y;
 }
+
+void Unit::draw(QGraphicsScene* scene) const {
+
+}

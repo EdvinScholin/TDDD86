@@ -6,12 +6,33 @@
 #ifndef JUNK_H
 #define JUNK_H
 
-#include "Unit.h"
+//#include "Unit.h"
+#include "Robot.h"
 #include <QGraphicsScene>
 
-class Junk : public Unit {
+class Junk : public Robot {
 public:
-    Junk(const Point& p): Unit(p){}
+    Junk(const Point& p): Robot(p){}
+
+    /*
+     * Do not move towards a hero
+     */
+    void moveTowards(const Unit& u);
+
+    /*
+     * did not crash yet
+     */
+    bool canMove() const;
+
+    /*
+     * Crashes and remembers it
+     */
+    void doCrash();
+
+    /*
+     * Return whether the robot crashed
+     */
+    bool justCrashed() const;
 
     /*
     * Draws this junk onto the given QGraphicsScene.
