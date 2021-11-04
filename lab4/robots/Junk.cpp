@@ -8,6 +8,10 @@
 
 void Junk::moveTowards(const Unit &u) {}
 
+Junk* Junk::clone() const{
+    return new Junk{ *this };
+}
+
 bool Junk::canMove() const {
     return false;
 }
