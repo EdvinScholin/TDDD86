@@ -9,7 +9,6 @@
 #include "constants.h"
 #include <iostream>
 
-
 GameState::GameState(int numberOfRobots) {
    for (int i = 0; i < numberOfRobots; i++) {
 //        Robot robot;
@@ -32,7 +31,22 @@ GameState::GameState(int numberOfRobots) {
     teleportHero();
 }
 
+GameState::~GameState() {
+    while (!robots.empty()){
+        Robot* robot = robots.back();
+        robots.pop_back();
+        delete robot;
+    }
+}
 
+GameState::GameState(const GameState& gameState) {
+    std::vector<Robot*> robots;
+    for (int i = 0; i < gameState.robots.size(); i++) {
+        robots.push_back(gameState.robots[i]->clone());
+    }
+
+    Hero hero = gameState.hero;
+}
 
 void GameState::draw(QGraphicsScene *scene) const {
     scene->clear();

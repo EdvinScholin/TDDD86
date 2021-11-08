@@ -25,8 +25,10 @@ public:
      */
     GameState(int numberOfRobots);
 
-    ~GameState() = default;
+    //~GameState() = default;
+    ~GameState();
 
+    GameState(const GameState& gameState);
 
     /*
      * Clear and redraw entire playing field
@@ -85,7 +87,7 @@ private:
 
     // private helpers
     bool isEmpty(const Unit& unit) const;
-
+    GameState& operator=(const GameState&) = delete;
 };
 
 #endif // GAMESTATE_H
