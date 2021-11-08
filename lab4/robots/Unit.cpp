@@ -27,8 +27,6 @@ bool Unit::at(const Unit& u) const {
     return (x == u.x && y == u.y);
 }
 
-
-
 void Unit::moveTowards(const Unit& u) {
     if (x > u.x) x--;
     if (x < u.x) x++;

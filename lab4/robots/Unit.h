@@ -28,6 +28,8 @@ public:
 
     virtual ~Unit(){}
 
+    //virtual Unit* clone() const = 0;
+
     /*
     * Return Point representation of Unit
     */
@@ -43,7 +45,6 @@ public:
     * Take one step closer to u
     */
     virtual void moveTowards(const Unit&);
-
 
     /*
     * Teleport. Does not check for collision

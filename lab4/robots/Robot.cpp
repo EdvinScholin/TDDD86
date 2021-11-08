@@ -10,6 +10,11 @@ Robot::Robot() {
 
 }
 
+Robot* Robot::clone() const
+{
+    return new Robot{ *this };
+}
+
 bool Robot::canMove() const{
     return !crashed;
 }
@@ -20,7 +25,6 @@ void Robot::doCrash(){
 
 bool Robot::justCrashed() const{
     return crashed;
-
 }
 
 void Robot::draw(QGraphicsScene *scene) const {

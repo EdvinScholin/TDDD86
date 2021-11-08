@@ -17,20 +17,22 @@ public:
 
     Robot(const Point& p): Unit(p){}
 
+    Robot* clone() const ;
+
     /*
      * did not crash yet
      */
-    bool canMove() const;
+    virtual bool canMove() const;
 
     /*
      * Crashes and remembers it
      */
-    void doCrash();
+    virtual void doCrash();
 
     /*
      * Return whether the robot crashed
      */
-    bool justCrashed() const;
+    virtual bool justCrashed() const;
 
 
     /*

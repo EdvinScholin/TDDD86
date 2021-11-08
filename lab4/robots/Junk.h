@@ -14,30 +14,32 @@ class Junk : public Robot {
 public:
     Junk(const Point& p): Robot(p){}
 
+    Junk* clone() const ;
+
     /*
      * Do not move towards a hero
      */
-    void moveTowards(const Unit& u);
+    void moveTowards(const Unit& u) override;
 
     /*
      * did not crash yet
      */
-    bool canMove() const;
+    bool canMove() const override;
 
     /*
      * Crashes and remembers it
      */
-    void doCrash();
+    void doCrash() override;
 
     /*
      * Return whether the robot crashed
      */
-    bool justCrashed() const;
+    bool justCrashed() const override;
 
     /*
     * Draws this junk onto the given QGraphicsScene.
     */
-    void draw(QGraphicsScene* scene) const;
+    void draw(QGraphicsScene* scene) const override;
 };
 
 #endif // JUNK_H

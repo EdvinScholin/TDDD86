@@ -32,6 +32,8 @@ GameState::GameState(int numberOfRobots) {
     teleportHero();
 }
 
+
+
 void GameState::draw(QGraphicsScene *scene) const {
     scene->clear();
     hero.draw(scene);
@@ -71,7 +73,7 @@ void GameState::updateCrashes() {
 }
 
 int GameState::countJustCrashed()const{
-    int numberDestroyed =0;
+    int numberDestroyed = 0;
     for(unsigned i=0; i < robots.size(); ++i)
         if(robots[i]->justCrashed())
             numberDestroyed++;
@@ -84,10 +86,15 @@ void GameState::junkTheCrashed(){
             //junks.push_back(Junk(robots[i].asPoint()));
             //robots.push_back(Junk(robots[i].asPoint()));
 
-            robots.push_back(new Junk(robots[i]->asPoint())); // Kanske fungerar
+//            robots.push_back(new Junk(robots[i]->asPoint())); // Kanske fungerar
+//            delete robots[i];
+//            robots[i] = robots[robots.size()-1]; //sätt till nya junken
+//            robots.pop_back();
+
+            Junk* new_junk = new Junk(robots[i]->asPoint());
             delete robots[i];
-            robots[i] = robots[robots.size()-1]; //sätt till nya junken
-            robots.pop_back();
+            robots[i] = new_junk;
+
         }
     }
 }
