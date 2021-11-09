@@ -2,6 +2,10 @@
  * Copyright (C) David Wolfe, 1999.  All rights reserved.
  * Ported to Qt and adapted for TDDD86, 2015.
  * Updated for TDDD86, 2021.
+ *
+ * This assignment was made by Wilmer Segerstedt (wilse150) and Edvin Schölin (edvsc779).
+ * This file contains declaration of the Unit class.
+ * See Unit.cpp for code implementation of each member.
  */
 
 #ifndef UNIT_H
@@ -27,8 +31,6 @@ public:
     Unit(const Point& p);
 
     virtual ~Unit(){}
-
-    //virtual Unit* clone() const = 0;
 
     /*
     * Return Point representation of Unit
@@ -56,7 +58,11 @@ public:
     */
     double distanceTo(const Unit& u) const;
 
+    /*
+     * Method used for drawing all units
+     */
     virtual void draw(QGraphicsScene* scene) const;
+
 private:
     int x;  // x position of this unit
     int y;  // y position of this unit

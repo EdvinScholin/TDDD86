@@ -3,6 +3,10 @@
  * Ported to Qt and adapted for TDDD86, 2015.
  *
  * Maintains the game state:  Location of all robots, junk and hero.
+ *
+ * This assignment was made by Wilmer Segerstedt (wilse150) and Edvin Schölin (edvsc779).
+ * This file contains declaration of the GameState class.
+ * See GameState.cpp for code implementation of each member.
  */
 
 #ifndef GAMESTATE_H
