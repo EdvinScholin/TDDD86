@@ -56,6 +56,4 @@ void Unit::checkBounds() {
     if (y > MAX_Y) y = MAX_Y;
 }
 
-void Unit::draw(QGraphicsScene* scene) const {
-
-}
+void Unit::draw(QGraphicsScene* scene) const {}

@@ -11,16 +11,6 @@
 
 GameState::GameState(int numberOfRobots) {
    for (int i = 0; i < numberOfRobots; i++) {
-//        Robot robot;
-//        while(!isEmpty(robot)){
-//            robot = Robot();
-//        }
-
-//       Robot* robot = nullptr; // osäker på nullptr
-//       while(!isEmpty(*robot)) {
-//           robot = new Robot();
-//       }
-
        Robot* robot = new Robot();
        while(!isEmpty(*robot)) {
            delete robot;
@@ -48,6 +38,21 @@ GameState::GameState(const GameState& gameState) {
     Hero hero = gameState.hero;
 }
 
+GameState& GameState::operator=(const GameState &gs) {
+    while (!robots.empty()){
+        Robot* robot = robots.back();
+        robots.pop_back();
+        delete robot;
+    }
+
+    for (int i = 0; i < gs.robots.size(); i++) {
+        robots.push_back(gs.robots[i]->clone());
+    }
+
+    this->hero = gs.hero;
+    return *this;
+}
+
 void GameState::draw(QGraphicsScene *scene) const {
     scene->clear();
     hero.draw(scene);
@@ -55,8 +60,6 @@ void GameState::draw(QGraphicsScene *scene) const {
         robot->draw(scene);
 
     }
-//    for (const Junk& junk: junks) // Kommer inte behövas
-//        junk.draw(scene);
 }
 
 void GameState::teleportHero() {
@@ -72,11 +75,6 @@ void GameState::moveRobots() {
 
 void GameState::updateCrashes() {
     for(unsigned i=0; i < robots.size(); ++i){
-//        for(unsigned j=0; j < junks.size(); ++j){
-//            if(robots[i].at(junks[j])){
-//                robots[i].doCrash();  // Kommer ej behövas
-//            }
-//        }
         for(unsigned o=i+1; o < robots.size(); ++o){
               if(robots[i]->at(*robots[o])){
                 robots[i]->doCrash();
@@ -97,18 +95,9 @@ int GameState::countJustCrashed()const{
 void GameState::junkTheCrashed(){
     for(unsigned i=0; i < robots.size(); ++i){
         if (robots[i]->justCrashed()) {
-            //junks.push_back(Junk(robots[i].asPoint()));
-            //robots.push_back(Junk(robots[i].asPoint()));
-
-//            robots.push_back(new Junk(robots[i]->asPoint())); // Kanske fungerar
-//            delete robots[i];
-//            robots[i] = robots[robots.size()-1]; //sätt till nya junken
-//            robots.pop_back();
-
             Junk* new_junk = new Junk(robots[i]->asPoint());
             delete robots[i];
             robots[i] = new_junk;
-
         }
     }
 }
@@ -127,11 +116,6 @@ bool GameState::heroDead() const {
             return true;
         }
     }
-//    for(const Junk& junk: junks){
-//        if(hero.at(junk)){
-//            return true;
-//        }
-//    }
     return false;
 }
 
@@ -149,9 +133,6 @@ bool GameState::isEmpty(const Unit& unit) const {
     for(const auto& robot: robots)
         if(robot->at(unit))
             return false;
-//    for(const Junk& junk: junks)
-//        if(junk.at(unit))
-//            return false;
     return true;
 }
 

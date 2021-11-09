@@ -25,10 +25,21 @@ public:
      */
     GameState(int numberOfRobots);
 
-    //~GameState() = default;
+    /*
+     * Destructor for GameState which deletes all robots
+     */
     ~GameState();
 
+    /*
+     * Copy constructor that clones all robots
+     */
     GameState(const GameState& gameState);
+
+    /*
+     * Equal operator which deletes all old robots in the list
+     * and appends the new robots. The hero will be the same.
+     */
+    GameState& operator=(const GameState& gs);
 
     /*
      * Clear and redraw entire playing field
@@ -82,12 +93,10 @@ public:
 
 private:
     std::vector<Robot*> robots;  // the robots
-   // std::vector<Junk> junks;    // robots that have turned to junk
     Hero hero;                  // the hero
 
     // private helpers
     bool isEmpty(const Unit& unit) const;
-    GameState& operator=(const GameState&) = delete;
 };
 
 #endif // GAMESTATE_H
