@@ -30,7 +30,6 @@ GameState::~GameState() {
 }
 
 GameState::GameState(const GameState& gameState) {
-    std::vector<Robot*> robots;
     for (int i = 0; i < gameState.robots.size(); i++) {
         robots.push_back(gameState.robots[i]->clone());
     }
@@ -39,17 +38,20 @@ GameState::GameState(const GameState& gameState) {
 }
 
 GameState& GameState::operator=(const GameState &gs) {
-    while (!robots.empty()){
-        Robot* robot = robots.back();
-        robots.pop_back();
-        delete robot;
+    if(this != &gs) {
+        while (!robots.empty()){
+            Robot* robot = robots.back();
+            robots.pop_back();
+            delete robot;
+        }
+
+        for (int i = 0; i < gs.robots.size(); i++) {
+            robots.push_back(gs.robots[i]->clone());
+        }
+
+        this->hero = gs.hero;
     }
 
-    for (int i = 0; i < gs.robots.size(); i++) {
-        robots.push_back(gs.robots[i]->clone());
-    }
-
-    this->hero = gs.hero;
     return *this;
 }
 
