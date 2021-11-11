@@ -1,6 +1,10 @@
 /**
  * Copyright (C) David Wolfe, 1999.  All rights reserved.
  * Ported to Qt and adapted for TDDD86, 2015.
+ *
+ * This assignment was made by Wilmer Segerstedt (wilse150) and Edvin Schölin (edvsc779).
+ * This file contains the code implementation of the Junk class.
+ * See Junk.h for comments about each member.
  */
 
 #include "Junk.h"
