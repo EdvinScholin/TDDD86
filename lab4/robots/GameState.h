@@ -22,7 +22,6 @@
 
 class GameState {
 public:
-
     /*
      * Create a GameState with randomly placed, but not
      * overlapping hero and numberOfRobots robots
