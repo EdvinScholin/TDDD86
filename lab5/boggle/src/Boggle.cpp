@@ -22,14 +22,16 @@ static string CUBES[NUM_CUBES] = {        // the letters on all 6 sides of every
 static const int rowAndColSize = 4;
 
 Boggle::Boggle(){
-    createBoard();
+    this->dict.addWordsFromFile("EnglishWords.dat");
+    this->userChosenWords = {};
+    //createBoard();
 }
 
 // TODO: implement the members you declared in Boggle.h
-Boggle::Boggle(string& playerChosenBoard) {
-//    this->dict = dict;
-    createBoard(playerChosenBoard);
-}
+//Boggle::Boggle(string& playerChosenBoard) {
+////    this->dict = dict;
+//    createBoard(playerChosenBoard);
+//}
 
 //Boggle::Boggle(const Lexicon& dict){
 //    this->dict = dict;
@@ -66,6 +68,45 @@ void Boggle::createBoard(string& playerChosenBoard) {
 Grid<string>& Boggle::getBoard() {
     return this->board;
 }
+
+bool Boggle::validWord(string word) {
+    if (userChosenWords.find(word) != userChosenWords.end()) {
+        return false;
+    }
+
+    else if (word.size() < 4) {
+        return false;
+    }
+
+    else if (!dict.contains(word)) {
+        return false;
+    }
+
+    userChosenWords.insert(word);
+    return true;
+}
+
+bool Boggle::findWordInBoard(string word, vector<int[2]> visited, int row, int col) {
+    if(this->board.get(row, col) == word.substr(0)) {
+        visited.push_back({row, col});
+        findWordInBoard(word.substr(1, word.size()-1), visited, )
+    }
+
+    if (word[0])
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

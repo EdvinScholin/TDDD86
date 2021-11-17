@@ -9,6 +9,7 @@
 #include "Boggle.h"
 #include "bogglemain.h"
 #include "strlib.h"
+#include <regex>
 // TODO: include any other header files you need
 
 void showBoard(Grid<string>& board) {
@@ -23,13 +24,59 @@ void showBoard(Grid<string>& board) {
     }
 }
 
+string inputBoard(string prompt) {
+    cout << prompt;
+    string answer;
+    getline(cin, answer);
+    answer = trim(toUpperCase(answer));
+    if (!regex_match(answer, regex("^[A-Z]{16}$"))) {
+        inputBoard("Your board is not valid. Try again! ");
+    }
+
+    return answer;
+}
+
+void userWordInput(Boggle& boggle) {
+    while (true) {
+        cout << "Type a word (or press Enter to end your turn): ";
+        string answer;
+        getline(cin, answer);
+        answer = trim(toUpperCase(answer));
+
+        if (answer == "") {
+            break;
+        }
+
+        else if (boggle.validWord(answer)) {
+            cout << "You found a new word! " << answer << endl;
+        }
+
+        else {
+            cout << "Not valid!" << endl;
+        }
+    }
+}
+
 /*
  * Plays one game of Boggle using the given boggle game state object.
  */
 void playOneGame(Boggle& boggle) {
     // TODO: implement this function (and add any other functions you like to help you)
-    showBoard(boggle.getBoard());
+
+    if (yesOrNo("Do you want to generate a random board? ")) {
+        boggle.createBoard();
+        showBoard(boggle.getBoard());
+    }
+    else {
+        string input = inputBoard("Enter board letters: ");
+        boggle.createBoard(input);
+        showBoard(boggle.getBoard());
+    }
+
+    userWordInput(boggle);
 }
+
+
 
 /*
  * Erases all currently visible text from the output console.

@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
+#include <set>
 #include <grid.h>
 #include <lexicon.h>
 // TODO: include any other header files you need
@@ -38,7 +38,9 @@ public:
 
     Grid<string>& getBoard();
 
+    bool validWord(string word);
 
+    bool findWordInBoard(string word, int visited[2], int row, int col);
 
 
 private:
@@ -49,7 +51,7 @@ private:
 //                                  "HLNNRZ"};
     Grid<string> board = Grid<string>(4,4);
     Lexicon dict;
-
+    set<string> userChosenWords;
 };
 
 #endif
