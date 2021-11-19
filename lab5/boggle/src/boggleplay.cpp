@@ -74,6 +74,15 @@ void playOneGame(Boggle& boggle) {
     }
 
     userWordInput(boggle);
+
+    set<string> words = boggle.findAllWords();
+
+    if (words.empty()) {
+        cout << "found no words." << endl;
+    }
+    for (string word : words){
+        cout << word << endl;
+    }
 }
 
 

@@ -12,6 +12,8 @@
 #include <set>
 #include <grid.h>
 #include <lexicon.h>
+#include <vector>
+#include <utility>
 // TODO: include any other header files you need
 
 using namespace std;
@@ -40,7 +42,11 @@ public:
 
     bool validWord(string word);
 
-    bool findWordInBoard(string word, int visited[2], int row, int col);
+    bool findWordInBoard(string word, set<int[2]> visited, int row, int col);
+
+    void findAllWordsHelper(set<pair<int, int>>& visited, int row, int col, string& possibleWord, set<string>& foundWords);
+
+    set<string> findAllWords();
 
 
 private:
