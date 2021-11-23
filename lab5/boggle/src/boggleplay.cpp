@@ -47,7 +47,7 @@ void userWordInput(Boggle& boggle) {
             break;
         }
 
-        else if (boggle.validWord(answer)) {
+        else if (boggle.validWord(answer) && boggle.findWord(answer) == true) {
             cout << "You found a new word! " << answer << endl;
         }
 
