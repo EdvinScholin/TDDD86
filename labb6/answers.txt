@@ -1,0 +1,21 @@
+1. Simulation::~Simulation() destruktorn i Simulation.cpp har rollen att ta bort alla fiskar
+   från allTheFish-vektorn.
+
+   Simulation::harvestTonnageNow kollar alla fiskar som är döda och tar bort dessa från
+   allTheFish-vektorn. När det är gjort kollas det om fiskarna som lever är stora nog att bli
+   tagna. Om de är det läggs fisken i ett Caught-tillstånd.
+
+   Simulation::addFish lägger till en fisk i allTheFish-vektorn.
+
+   Simulation::run kör så länge eventQueue inte är tom, lägg till till nästa event och ta bort
+   det från eventQueue. Om simulationstiden inte är slut kör den nästa event och sätter
+   simulationstiden till tiden som eventet tar.
+
+   Simulation::scheduleEvent lägger till ett nytt event till kön.
+
+3. I event.cpp, rad 13 allokeras en fisk och deallokeras i Simulation::~Simulation och
+   Simulation::harvestTonnageNow.
+   I main.cpp allokeras olika sorters event i main-metoden.
+
+   Det finns inga minnesläckor för att objekten deallokeras på ett sätt som gör att när
+   programmet har kört så tar den bor objekten.
