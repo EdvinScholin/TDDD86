@@ -1,8 +1,9 @@
-// This is the .cpp file you will edit and turn in.
-// We have provided a minimal skeleton for you,
-// but you must finish it as described in the spec.
-// Also remove these comments here and add your own.
-// TODO: remove this comment header and replace it with your own
+/*
+ * This assigment was made by Edvin Schölin (edvsc779) and Wilmer Segerstedt (wilse150).
+ *
+ * This cpp file contains the implementation of the Boggle class. See header file to
+ * view a description of the methods.
+ */
 
 #include <sstream>
 #include "Boggle.h"
@@ -11,38 +12,24 @@
 #include "strlib.h"
 #include "string.h"
 
-
 static const int NUM_CUBES = 16;   // the number of cubes in the game
-static const int CUBE_SIDES = 6;   // the number of sides on each cube
 static string CUBES[NUM_CUBES] = {        // the letters on all 6 sides of every cube
    "AAEEGN", "ABBJOO", "ACHOPS", "AFFKPS",
    "AOOTTW", "CIMOTU", "DEILRX", "DELRVY",
    "DISTTY", "EEGHNW", "EEINSU", "EHRTVW",
    "EIOSST", "ELRTTY", "HIMNQU", "HLNNRZ"
 };
-static const int rowAndColSize = 4;
+static const int rowAndColSize = 4; // the row and column size of the grid
 
 Boggle::Boggle(){
     this->dict.addWordsFromFile("EnglishWords.dat");
-    this->userChosenWords = {};
-    //createBoard();
 }
 
-// TODO: implement the members you declared in Boggle.h
-//Boggle::Boggle(string& playerChosenBoard) {
-////    this->dict = dict;
-//    createBoard(playerChosenBoard);
-//}
-
-//Boggle::Boggle(const Lexicon& dict){
-//    this->dict = dict;
-//    createBoard();
-//}
-
-/*
- * Creates board with the pre determined cubes and then shuffles board.
- */
 void Boggle::createBoard() {
+    this->userChosenWords = {};
+    this->computerWords = {};
+    this->points = 0;
+    this->computerPoints = 0;
     int i = 0;
     for (int row = 0; row < rowAndColSize; row++) {
         for (int col = 0; col < rowAndColSize; col++) {
@@ -53,10 +40,11 @@ void Boggle::createBoard() {
     shuffle(board);
 }
 
-/*
- * Creates board when player chooses what letters should be included.
- */
 void Boggle::createBoard(string& playerChosenBoard) {
+    this->userChosenWords = {};
+    this->computerWords = {};
+    this->points = 0;
+    this->computerPoints = 0;
     int i = 0;
     for (int row = 0; row < rowAndColSize; row++) {
         for (int col = 0; col < rowAndColSize; col++) {
@@ -83,23 +71,22 @@ bool Boggle::validWord(string word) {
         return false;
     }
 
-    userChosenWords.insert(word);
     return true;
 }
 
-void Boggle::findAllWordsHelper(set<pair<int, int>>& visited, int row, int col, string& possibleWord, set<string>& foundWords) {
+void Boggle::findAllWordsHelper(set<pair<int, int>>& visited, int row, int col, string& possibleWord) {
     visited.insert({row, col});
     possibleWord += board.get(row, col);
 
-    if(possibleWord.size() >= 4 && dict.contains(possibleWord)) {
-        foundWords.insert(possibleWord);
+    if (possibleWord.size() >= 4 && dict.contains(possibleWord) && userChosenWords.find(possibleWord) == userChosenWords.end()) {
+        computerWords.insert(possibleWord);
     }
 
     for (int inner_row = row-1; inner_row < row + 2; inner_row++) {
         for (int inner_col = col-1; inner_col < col + 2; inner_col++) {
             if(board.inBounds(inner_row, inner_col) && visited.find({inner_row,inner_col}) == visited.end()) {
                 if (dict.containsPrefix(possibleWord)) {
-                    findAllWordsHelper(visited, inner_row, inner_col, possibleWord, foundWords);
+                    findAllWordsHelper(visited, inner_row, inner_col, possibleWord);
                 }
             }
         }
@@ -109,7 +96,7 @@ void Boggle::findAllWordsHelper(set<pair<int, int>>& visited, int row, int col, 
     visited.erase({row, col});
 }
 
-set<string> Boggle::findAllWords() {
+void Boggle::findAllWords() {
     set<string> foundWords;
     set<pair<int, int>> visited;
     string possibleWord = "";
@@ -117,15 +104,16 @@ set<string> Boggle::findAllWords() {
 
     for (int row = 0; row < rowAndColSize; row++) {
         for (int col = 0; col < rowAndColSize; col++) {
-            findAllWordsHelper(visited, row, col, possibleWord, foundWords);
+            findAllWordsHelper(visited, row, col, possibleWord);
         }
     }
-    return foundWords;
+
+    computerPoints = calculateComputerPoints();
 }
 
 
-bool Boggle::findWordInBoard(string word, string possibleWord, set<pair<int, int> > &visited, int row, int col){
-    if (possibleWord.length() == 1){
+bool Boggle::foundWordHelper(string word, string possibleWord, set<pair<int, int> > &visited, int row, int col){
+    if (possibleWord == ""){
         return true;
     }
 
@@ -134,9 +122,11 @@ bool Boggle::findWordInBoard(string word, string possibleWord, set<pair<int, int
 
         for (int inner_row = row-1; inner_row < row + 2; inner_row++) {
             for (int inner_col = col-1; inner_col < col + 2; inner_col++) {
-                if(board.inBounds(inner_row, inner_col) && visited.find({inner_row,inner_col}) == visited.end()) {
-                    if(possibleWord.substr(0,1) == board.get(inner_row, inner_col)) {
-                        return findWordInBoard(word, possibleWord.substr(1), visited, inner_row, inner_col);
+                if (board.inBounds(inner_row, inner_col) && visited.find({inner_row,inner_col}) == visited.end()) {
+                    if (possibleWord.substr(0,1) == board.get(inner_row, inner_col)) {
+                        if (foundWordHelper(word, possibleWord.substr(1), visited, inner_row, inner_col)) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -147,26 +137,54 @@ bool Boggle::findWordInBoard(string word, string possibleWord, set<pair<int, int
     return false;
 }
 
-bool Boggle::findWord(string word) {
+bool Boggle::foundWord(string word) {
     set<string> foundWords;
     set<pair<int, int>> visited;
-    string newWord;
-    cout << word << endl;
 
     for (int row = 0; row < rowAndColSize; row++) {
         for (int col = 0; col < rowAndColSize; col++) {
-            if(word.substr(0,1) == board.get(row, col)) {
-                return findWordInBoard(word, word.substr(1), visited, row, col);
+            if (word.substr(0,1) == board.get(row, col)) {
+                if (foundWordHelper(word, word.substr(1), visited, row, col)) {
+                    return true;
+                }
             }
         }
     }
     return false;
 }
 
+void Boggle::addPoint(string word) {
+    int lettersOverFour = word.size() - 3;
+    points += lettersOverFour;
+}
 
+void Boggle::addUserWord(string word) {
+    userChosenWords.insert(word);
+}
 
+int Boggle::getPoints() {
+    return points;
+}
 
+int Boggle::getComputerPoints() {
+    return computerPoints;
+}
 
+set<string> Boggle::getUserChosenWords() {
+    return userChosenWords;
+}
+
+set<string> Boggle::getComputerWords() {
+    return computerWords;
+}
+
+int Boggle::calculateComputerPoints() {
+    int points = 0;
+    for (auto word : computerWords) {
+        points += word.length()-3;
+    }
+    return points;
+}
 
 
 

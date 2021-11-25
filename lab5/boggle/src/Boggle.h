@@ -1,8 +1,9 @@
-// This is the .h file you will edit and turn in.
-// We have provided a minimal skeleton for you,
-// but you must finish it as described in the spec.
-// Also remove these comments here and add your own, as well as on the members.
-// TODO: remove this comment header and replace it with your own
+/*
+ * This assigment was made by Edvin Schölin (edvsc779) and Wilmer Segerstedt (wilse150).
+ *
+ * This is the header file of the game Boggle. See boggle.cpp for the implementation of
+ * the methods.
+ */
 
 #ifndef _boggle_h
 #define _boggle_h
@@ -14,7 +15,6 @@
 #include <lexicon.h>
 #include <vector>
 #include <utility>
-// TODO: include any other header files you need
 
 using namespace std;
 
@@ -24,42 +24,91 @@ public:
     const int MIN_WORD_LENGTH = 4;
     const int BOARD_SIZE = 4;
 
-    // TODO: decide the public member functions and declare them
     Boggle();
 
     /*
-     * Creates board using the lexicon
+     * Creates board with the pre determined cubes and then shuffles board.
      */
-    Boggle(string& playerChosenBoard);
-
-    //Boggle(const Lexicon& dict);
-
-    void createBoard(string& playerChosenBoard);
-
     void createBoard();
 
+    /*
+     * Creates board when player chooses what letters should be included.
+     */
+    void createBoard(string& playerChosenBoard);
+
+    /*
+     * Returns the board.
+     */
     Grid<string>& getBoard();
 
+    /*
+     * Checks if inputed word is valid.
+     */
     bool validWord(string word);
 
-    bool findWordInBoard(string word, string possibleWord, set<pair<int, int>>& visited, int row, int col);
+    /*
+     * Helper function for the foundWord() method. Uses recursive backtracking.
+     */
+    bool foundWordHelper(string word, string possibleWord, set<pair<int, int>>& visited, int row, int col);
 
-    void findAllWordsHelper(set<pair<int, int>>& visited, int row, int col, string& possibleWord, set<string>& foundWords);
+    /*
+     * Helper function for the findAllWords() method. Uses recursive backtracking.
+     */
+    void findAllWordsHelper(set<pair<int, int>>& visited, int row, int col, string& possibleWord);
 
-    set<string> findAllWords();
+    /*
+     * Uses helper function to let the computer find all words in the board.
+     */
+    void findAllWords();
 
-    bool findWord(string word);
+    /*
+     * Uses helper function to check if a given word is in board.
+     */
+    bool foundWord(string word);
+
+    /*
+     * Adds appropriate amounts of points for a given word.
+     */
+    void addPoint(string word);
+
+    /*
+     * Adds given word to userChosenWords.
+     */
+    void addUserWord(string word);
+
+    /*
+     * Returns player points.
+     */
+    int getPoints();
+
+    /*
+     * Returns the computer points.
+     */
+    int getComputerPoints();
+
+    /*
+     * Returns set of words the user has answered correctly.
+     */
+    set<string> getUserChosenWords();
+
+    /*
+     * Returns all the words the player couldn't find.
+     */
+    set<string> getComputerWords();
+
+    /*
+     * Returns the sum of points from the words the computer has found.
+     */
+    int calculateComputerPoints();
 
 
 private:
-    // TODO: decide the private member variables/functions and declare them
-//    vector<string> boggleCubes = {"AAEEGN", "ABBJOO", "ACHOPS", "AFFKPS", "AOOTTW",
-//                                  "CIMOTU", "DEILRX", "DELRVY", "DISTTY", "EEGHNW",
-//                                  "EEISNU", "EHRTVW", "EIOSST", "ELRTTY", "HIMNQU"
-//                                  "HLNNRZ"};
     Grid<string> board = Grid<string>(4,4);
     Lexicon dict;
     set<string> userChosenWords;
+    set<string> computerWords;
+    int points;
+    int computerPoints;
 };
 
 #endif

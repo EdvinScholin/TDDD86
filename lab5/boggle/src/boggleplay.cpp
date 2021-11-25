@@ -1,6 +1,8 @@
-// You will edit and turn in this CPP file.
-// Also remove these comments here and add your own.
-// TODO: remove this comment header and replace with your own
+/*
+ * This assigment was made by Edvin Schölin (edvsc779) and Wilmer Segerstedt (wilse150).
+ *
+ * This file handles the visual elements of the Boggle game.
+ */
 
 #include <cstdlib>
 #include <iostream>
@@ -10,12 +12,11 @@
 #include "bogglemain.h"
 #include "strlib.h"
 #include <regex>
-// TODO: include any other header files you need
 
+/*
+ * Iterates over grid elements.
+ */
 void showBoard(Grid<string>& board) {
-    //cout << board.toString();
-    //cout << board.get(0, 0);
-
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
            cout << board.get(row, col) << " ";
@@ -24,22 +25,44 @@ void showBoard(Grid<string>& board) {
     }
 }
 
+/*
+ * Sets the board to players input.
+ */
 string inputBoard(string prompt) {
     cout << prompt;
     string answer;
     getline(cin, answer);
     answer = trim(toUpperCase(answer));
     if (!regex_match(answer, regex("^[A-Z]{16}$"))) {
-        inputBoard("Your board is not valid. Try again! ");
+        answer = inputBoard("Your board is not valid. Try again! ");
     }
 
     return answer;
 }
 
-void userWordInput(Boggle& boggle) {
-    while (true) {
+void printWords(set<string> words) {
+    cout << "{";
+    for (auto word: words) {
+        cout << "\"" << word << "\", ";
+    }
+    cout << "}" << endl;
+}
+
+/*
+ * Handles the interface of all rounds of the game.
+ */
+void userInterface(Boggle& boggle) {
+    cout << "It's your turn!" << endl;
+    showBoard(boggle.getBoard());
+
+    string answer;
+
+    while(true) {
+        cout << "Your words (" << boggle.getUserChosenWords().size() << "): ";
+        printWords(boggle.getUserChosenWords());
+        cout << "Your score: " << boggle.getPoints() << endl;
+
         cout << "Type a word (or press Enter to end your turn): ";
-        string answer;
         getline(cin, answer);
         answer = trim(toUpperCase(answer));
 
@@ -47,13 +70,18 @@ void userWordInput(Boggle& boggle) {
             break;
         }
 
-        else if (boggle.validWord(answer) && boggle.findWord(answer) == true) {
+        else if (boggle.validWord(answer) && boggle.foundWord(answer) == true) {
             cout << "You found a new word! " << answer << endl;
+            boggle.addUserWord(answer);
+            boggle.addPoint(answer);
         }
 
         else {
             cout << "Not valid!" << endl;
         }
+
+        showBoard(boggle.getBoard());
+        cout << endl;
     }
 }
 
@@ -61,31 +89,30 @@ void userWordInput(Boggle& boggle) {
  * Plays one game of Boggle using the given boggle game state object.
  */
 void playOneGame(Boggle& boggle) {
-    // TODO: implement this function (and add any other functions you like to help you)
-
     if (yesOrNo("Do you want to generate a random board? ")) {
         boggle.createBoard();
-        showBoard(boggle.getBoard());
     }
     else {
         string input = inputBoard("Enter board letters: ");
         boggle.createBoard(input);
-        showBoard(boggle.getBoard());
+
     }
 
-    userWordInput(boggle);
+    userInterface(boggle);
 
-    set<string> words = boggle.findAllWords();
+    cout << "It's my turn!" << endl;
+    boggle.findAllWords();
+    cout << "My words (" << boggle.getComputerWords().size() << "): ";
+    printWords(boggle.getComputerWords());
+    cout << "My score: " << boggle.getComputerPoints() << endl;
 
-    if (words.empty()) {
-        cout << "found no words." << endl;
+    if (boggle.getPoints() >= boggle.getComputerPoints()) {
+        cout << "WOW, you defeated me! Congratulations!" << endl;
     }
-    for (string word : words){
-        cout << word << endl;
+    else {
+        cout << "Ha ha ha, I destroyed you. Better luck next time, puny human!" << endl;
     }
 }
-
-
 
 /*
  * Erases all currently visible text from the output console.
