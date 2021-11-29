@@ -13,6 +13,10 @@
 
    Simulation::scheduleEvent lägger till ett nytt event till kön.
 
+2. (LANDING, MIN_CATCHABLE_AGE).
+   Paren (70000, 300), (90000, 300), (70000, 450) uppfyller kraven. Vi ser att båda
+   parametrarna påverkar hållbarheten.
+
 3. I event.cpp, rad 13 allokeras en fisk och deallokeras i Simulation::~Simulation och
    Simulation::harvestTonnageNow.
    I main.cpp allokeras olika sorters event i main-metoden.

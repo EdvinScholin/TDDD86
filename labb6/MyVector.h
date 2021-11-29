@@ -47,8 +47,6 @@ private:
     T* storage;
     unsigned capacity;
     unsigned numberOfElements;
-    // private members?
-
 };
 
 template<typename T>
@@ -56,23 +54,22 @@ MyVector<T>::MyVector(){
     this->storage = new T [1];
     this->capacity = 1;
     this->numberOfElements = 0;
-    MYEXCEPTION("unimplemented method");
 }
 
 template<typename T>
 MyVector<T>::~MyVector(){
     delete storage;
-    MYEXCEPTION("unimplemented method");
 }
 
 template<typename T>
 MyVector<T>::MyVector(const MyVector& other){
-//    for (int i = 0; i < other.storage.size(); i++) {
-//        storage[i] = other.storage[i];
-//    }
     storage = new T [other.capacity];
-    copy(begin(other), end(other), begin(storage)); // WE think this right is, yes!
-    MYEXCEPTION("unimplemented method");
+    //copy(begin(other.storage), end(other.storage), begin(storage)); // WE think this right is, yes!
+    for (int i = 0; i < other.numberOfElements; i++) {
+        storage[i] = other.storage[i];
+    }
+    numberOfElements = other.numberOfElements;
+    capacity = other.capacity;
 }
 
 template<typename T>
@@ -82,74 +79,76 @@ MyVector<T>& MyVector<T>::operator =(const MyVector& other){
         storage = new T [other.capacity];
         capacity = other.capacity;
         numberOfElements = other.numberOfElements;
-        copy(begin(other), end(other), begin(storage));
+        //copy(begin(other.storage), end(other.storage), begin(storage));
+        for (int i = 0; i < other.numberOfElements; i++) {
+            storage[i] = other.storage[i];
+        }
     }
 
     return *this; // kanske rätt
-    MYEXCEPTION("unimplemented method");
 }
 
 template<typename T>
 void MyVector<T>::push_back(const T& e){
     if (numberOfElements == capacity) {
         T* temp = new T[2*capacity];
-        copy(begin(storage), end(storage), begin(temp));
-        delete storage;
+        //copy(begin(storage), end(storage), begin(temp));
+        for (int i = 0; i < numberOfElements; i++) {
+            temp[i] = storage[i];
+        }
+
+        //delete storage;
         storage = temp; //Osäker med hur man gör med pekare
-        storage[numberOfElements + 1] = e;
+        delete[] temp;
         capacity *= 2;
     }
-    numberOfElements += 1;
+
     storage[numberOfElements] = e;
-    MYEXCEPTION("unimplemented method");
+    numberOfElements += 1;
+
 }
 
 template<typename T>
 void MyVector<T>::pop_back(){
     numberOfElements -= 1;
-    MYEXCEPTION("unimplemented method");
 }
 
 template<typename T>
 T& MyVector<T>::operator[](unsigned i){
-
-    MYEXCEPTION("unimplemented method");
+    return storage[i];
 }
 
 template<typename T>
 const T& MyVector<T>::operator[](unsigned i)const{
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+    return storage[i];
 }
 
 template<typename T>
 bool MyVector<T>::empty()const{
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+    return numberOfElements == 0;
 }
 
 template<typename T>
 void MyVector<T>::clear(){
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+    delete storage;
+    storage = new T [1];
+    numberOfElements = 0;
+    capacity = 1;
 }
 
 template<typename T>
 unsigned MyVector<T>::size()const{
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+    return numberOfElements;
 }
 
 template<typename T>
 T* MyVector<T>::begin(){
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+    return &storage;
 }
 
 template<typename T>
 T* MyVector<T>::end(){
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+    return &(storage + capacity);
 }
 
 #endif // MY_VECTOR_H
