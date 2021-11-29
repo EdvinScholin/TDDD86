@@ -16,7 +16,7 @@
 /*
  * Iterates over grid elements.
  */
-void showBoard(Grid<string>& board) {
+void showBoard(Grid<string> const& board) {
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
            cout << board.get(row, col) << " ";
@@ -40,7 +40,7 @@ string inputBoard(string prompt) {
     return answer;
 }
 
-void printWords(set<string> words) {
+void printWords(set<string> const& words) {
     cout << "{";
     for (auto word: words) {
         cout << "\"" << word << "\", ";

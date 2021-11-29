@@ -54,7 +54,7 @@ void Boggle::createBoard(string& playerChosenBoard) {
     }
 }
 
-Grid<string>& Boggle::getBoard() {
+Grid<string> const& Boggle::getBoard() {
     return this->board;
 }
 
@@ -112,7 +112,7 @@ void Boggle::findAllWords() {
 }
 
 
-bool Boggle::foundWordHelper(string word, string possibleWord, set<pair<int, int> > &visited, int row, int col){
+bool Boggle::foundWordHelper(string& word, string possibleWord, set<pair<int, int>>& visited, int row, int col){
     if (possibleWord == ""){
         return true;
     }
@@ -137,7 +137,7 @@ bool Boggle::foundWordHelper(string word, string possibleWord, set<pair<int, int
     return false;
 }
 
-bool Boggle::foundWord(string word) {
+bool Boggle::foundWord(string& word) {
     set<string> foundWords;
     set<pair<int, int>> visited;
 
@@ -153,12 +153,12 @@ bool Boggle::foundWord(string word) {
     return false;
 }
 
-void Boggle::addPoint(string word) {
+void Boggle::addPoint(string const& word) {
     int lettersOverFour = word.size() - 3;
     points += lettersOverFour;
 }
 
-void Boggle::addUserWord(string word) {
+void Boggle::addUserWord(string const& word) {
     userChosenWords.insert(word);
 }
 
@@ -170,11 +170,11 @@ int Boggle::getComputerPoints() {
     return computerPoints;
 }
 
-set<string> Boggle::getUserChosenWords() {
+set<string>& Boggle::getUserChosenWords() {
     return userChosenWords;
 }
 
-set<string> Boggle::getComputerWords() {
+set<string>& Boggle::getComputerWords() {
     return computerWords;
 }
 

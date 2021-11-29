@@ -39,7 +39,7 @@ public:
     /*
      * Returns the board.
      */
-    Grid<string>& getBoard();
+    Grid<string> const& getBoard();
 
     /*
      * Checks if inputed word is valid.
@@ -49,7 +49,12 @@ public:
     /*
      * Helper function for the foundWord() method. Uses recursive backtracking.
      */
-    bool foundWordHelper(string word, string possibleWord, set<pair<int, int>>& visited, int row, int col);
+    bool foundWordHelper(string& word, string possibleWord, set<pair<int, int>>& visited, int row, int col);
+
+    /*
+     * Uses helper function to check if a given word is in board.
+     */
+    bool foundWord(string& word);
 
     /*
      * Helper function for the findAllWords() method. Uses recursive backtracking.
@@ -62,19 +67,14 @@ public:
     void findAllWords();
 
     /*
-     * Uses helper function to check if a given word is in board.
-     */
-    bool foundWord(string word);
-
-    /*
      * Adds appropriate amounts of points for a given word.
      */
-    void addPoint(string word);
+    void addPoint(string const& word);
 
     /*
      * Adds given word to userChosenWords.
      */
-    void addUserWord(string word);
+    void addUserWord(string const& word);
 
     /*
      * Returns player points.
@@ -89,12 +89,12 @@ public:
     /*
      * Returns set of words the user has answered correctly.
      */
-    set<string> getUserChosenWords();
+    set<string>& getUserChosenWords();
 
     /*
      * Returns all the words the player couldn't find.
      */
-    set<string> getComputerWords();
+    set<string>& getComputerWords();
 
     /*
      * Returns the sum of points from the words the computer has found.
