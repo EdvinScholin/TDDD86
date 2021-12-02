@@ -1,8 +1,8 @@
-// This is the first .h file you will edit
-// We have provided a skeleton for you,
-// but you must finish it as described in the spec.
-// Also remove these comments here and add your own, as well as on the members.
-// TODO: remove this comment header
+/*
+ * This assignment was made by Edvin Schölin (edvsc779) and Wilmer Segerstedt (wilse150).
+ * This is a template class for an implementation of a vector. See template methods for the
+ * implementation.
+ */
 
 #ifndef MY_VECTOR_H
 #define MY_VECTOR_H
@@ -114,7 +114,7 @@ MyVector<T>::MyVector(const MyVector& other){
 template<typename T>
 MyVector<T>& MyVector<T>::operator=(const MyVector& other){
     if (this != &other) {
-        delete storage;
+        delete[] storage;
         storage = new T [other.capacity];
         capacity = other.capacity;
         numberOfElements = other.numberOfElements;
@@ -140,6 +140,23 @@ void MyVector<T>::push_back(const T& e){
     storage[numberOfElements] = e;
     numberOfElements += 1;
 }
+
+//template<typename T>
+//void MyVector<T>::push_back(const T& e){
+//    if (numberOfElements == capacity) {
+//        T* temp = new T[capacity + 1];
+//        for (int i = 0; i < numberOfElements; i++) {
+//            temp[i] = storage[i];
+//        }
+
+//        delete[] storage;
+//        storage = temp;
+//        capacity++;
+//    }
+
+//    storage[numberOfElements] = e;
+//    numberOfElements += 1;
+//}
 
 template<typename T>
 void MyVector<T>::pop_back(){
@@ -176,12 +193,12 @@ unsigned MyVector<T>::size()const{
 
 template<typename T>
 T* MyVector<T>::begin(){
-    return &storage[0]; //&storage;
+    return &storage[0];
 }
 
 template<typename T>
 T* MyVector<T>::end(){
-    return &storage[numberOfElements]; //numberOfElements eller capacity?
+    return &storage[numberOfElements];
 }
 
 #endif // MY_VECTOR_H

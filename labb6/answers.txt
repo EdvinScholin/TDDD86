@@ -1,3 +1,4 @@
+DEL A:
 1. Simulation::~Simulation() destruktorn i Simulation.cpp har rollen att ta bort alla fiskar
    från allTheFish-vektorn.
 
@@ -23,3 +24,6 @@
 
    Det finns inga minnesläckor för att objekten deallokeras på ett sätt som gör att när
    programmet har kört så tar den bor objekten.
+
+DEL C:
+Med push_back O(n) blir programmet väldigt långsamt jämfört med O(1).

@@ -1,8 +1,9 @@
-// This is the second .h file you will edit
-// We have provided a skeleton for you,
-// but you must finish it as described in the spec.
-// Also remove these comments here and add your own, as well as on the members.
-// TODO: remove this comment header
+/*
+ * This assignment was made by Edvin Schölin (edvsc779) and Wilmer Segerstedt (wilse150).
+ * This is a template class for an implementation of a priority queue.
+ * The code is based on an OpenDSA example. See template methods for the
+ * implementation.
+ */
 
 #ifndef MY_PRIORITY_QUEUE_H
 #define MY_PRIORITY_QUEUE_H
@@ -22,27 +23,36 @@ public:
 
     ~MyPriorityQueue();
 
+    /*
+     * Places an object t to appropriate position in MyVector.
+     */
     void push(const T& t);
 
+    /*
+     * Returns element with highest priority.
+     */
     T top()const;
 
+    /*
+     * Removes element with highest priority.
+     */
     void pop();
 
+    /*
+     * Returns whether the queue is empty or not.
+     */
     bool empty()const;
 
 private:
-    // Other private members?
     int parent(int pos) {
-        if (pos <= 0) return -1;
         return (pos-1)/2;
       }
 
     bool isLeaf(int pos) {
-        return (pos >= vector_array.size()/2) && (pos < vector_array.size());
+        return (pos >= (vector_array.size()/2)) && (pos < vector_array.size());
     }
 
     int leftchild(int pos) {
-        if (pos >= vector_array.size()/2) return - 1;
         return 2*pos + 1;
       }
 };
@@ -57,14 +67,11 @@ MyPriorityQueue<T,C>::~MyPriorityQueue(){
 
 template <typename T, typename C>
 void MyPriorityQueue<T,C>::push(const T& t){
-    int currentPos = vector_array.size();
-    vector_array[currentPos] = t;
+    vector_array.push_back(t);
+    int currentPos = vector_array.size() - 1;
     while ((currentPos != 0) && strictly_larger_operator(vector_array[parent(currentPos)], vector_array[currentPos])) {
-//        T temp = vector_array[parent(currentPos)]; // byt plats på parent och currentPos
-//        vector_array[parent(currentPos)] = vector_array[currentPos];
-//        vector_array[currentPos] = temp;
         swap(vector_array[parent(currentPos)], vector_array[currentPos]);
-        currentPos = parent(currentPos); // Tror detta är rätt
+        currentPos = parent(currentPos);
     }
 }
 
@@ -79,22 +86,25 @@ void MyPriorityQueue<T,C>::pop(){
     vector_array.pop_back();
 
     int currentPos = 0;
-    if (currentPos < 0 || currentPos > vector_array.size()) {
-        return;
-    }
     while (!isLeaf(currentPos)) {
        int child = leftchild(currentPos);
-       if ((child < vector_array.size() - 1) && strictly_larger_operator(vector_array[currentPos + 1], vector_array[currentPos])) { // which of the siblings is largest
-           child++; // becomes right child
+
+       if (child >= vector_array.size()) {
+           return;
        }
 
-       if (strictly_larger_operator(vector_array[currentPos], vector_array[child])) {
-//           T temp = vector_array[child]; // byt plats på parent och currentPos
-//           vector_array[child] = vector_array[currentPos];
-//           vector_array[currentPos] = temp;
-           swap(vector_array[child], vector_array[currentPos]);
-           currentPos = child; // Tror detta är rätt
+       if ((child + 1 < vector_array.size())) { // which of the siblings is largest
+           if (strictly_larger_operator(vector_array[child], vector_array[child + 1])) {
+               child++; // becomes right child
+           }
        }
+
+       if (strictly_larger_operator(vector_array[child], vector_array[currentPos])) {
+           return;
+       }
+
+       swap(vector_array[child], vector_array[currentPos]);
+       currentPos = child;
     }
 }
 
