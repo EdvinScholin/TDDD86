@@ -28,7 +28,6 @@
  *
  **********************************************************************/
 
-Brute: Vi tror att algoritmen har en värstafallstid i O(n⁴) komplexitet då det är är värstafallstiden för den fyrnästlade loopen.
+Brute: Vi tror att algoritmen har en värstafallstid i O(n⁴) komplexitet då det är är värstafallstiden för den fyrnästlade loopen. På ungefär detta sätt kommer kan komplexiteten beräknas (n-1)(n-2-i)(n-1-i-j)(n-i-j-k) vilket ger O(n⁴).
 
-Sortering: Vi tror att algoritmen har en värstafallstid i O(n²) komplexitet då det är
-värstafallstiden för den tvånästlade loopen.
+Sortering: Vi tror att algoritmen har en värstafallstid i O(n²log(n)) komplexitet. Det beror på att värstafallstiden att sätta in i en map blir O(log(n)) på grund av sorteringen och i den tvånästlade loopen från den värstafallstiden O(n²). 

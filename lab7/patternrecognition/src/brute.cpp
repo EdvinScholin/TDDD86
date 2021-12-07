@@ -29,39 +29,11 @@ void render_line(QGraphicsScene* scene, const Point& p1, const Point& p2) {
     p1.lineTo(scene, p2);
 }
 
-void fast(vector<Point> points, QGraphicsScene* scene, QApplication a) {
-    auto begin = chrono::high_resolution_clock::now();
-    map<int, vector<Point>> slopeMap;
-
-    for (unsigned p = 0; p<points.size(); p++) {
-        for (unsigned q = p+1; q < points.size(); q++) {
-            slopeMap[points[p].slopeTo(points[q])].push_back(points[q]);
-
-
-        }
-        //sort(slopeMap.begin(), slopeMap.end()); //kanske ska bort?
-
-        for (auto& elem : slopeMap) {
-            if (elem.second.size() > 2) {
-                render_line(scene, points.at(p), elem.second.at(elem.second.size()-1));
-                a.processEvents(); // show rendered line
-            }
-
-        }
-        slopeMap.clear();
-    }
-    auto end = chrono::high_resolution_clock::now();
-    cout << "Computing line segments took "
-         << std::chrono::duration_cast<chrono::milliseconds>(end - begin).count()
-         << " milliseconds." << endl;
-
-}
-
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     // open file
-    string filename = "input12800.txt";
+    string filename = "input100.txt";
     ifstream input;
     input.open(filename);
 
@@ -131,7 +103,7 @@ int main(int argc, char *argv[]) {
 
         for (auto const& elem : slopeMap) {
             if (elem.second.size() > 2) {
-                render_line(scene, points[p], elem.second.at(elem.second.size()-1));
+                render_line(scene, points[p], elem.second[elem.second.size()-1]);
                 a.processEvents(); // show rendered line
             }
 
