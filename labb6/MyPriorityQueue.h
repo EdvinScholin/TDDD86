@@ -93,8 +93,8 @@ void MyPriorityQueue<T,C>::pop(){
            return;
        }
 
-       if ((child + 1 < vector_array.size())) { // which of the siblings is largest
-           if (strictly_larger_operator(vector_array[child], vector_array[child + 1])) {
+       if ((child + 1 < vector_array.size())) {
+           if (strictly_larger_operator(vector_array[child], vector_array[child + 1])) { // which of the siblings is largest
                child++; // becomes right child
            }
        }
