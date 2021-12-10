@@ -72,7 +72,7 @@ Vertex* BFS(BasicGraph& graph, Vertex* start, Vertex* end, queue<Vertex*> q) {
             return currentVertex;
         }
 
-        for (auto neighbour : graph.getNeighbors(currentVertex)) {
+        for (Vertex* neighbour : graph.getNeighbors(currentVertex)) {
             if (!neighbour->visited) {
                 neighbour->previous = currentVertex;
                 neighbour->setColor(YELLOW);
@@ -111,36 +111,38 @@ vector<Node *> breadthFirstSearch(BasicGraph& graph, Vertex* start, Vertex* end)
 
 Vertex* dijsktraHelp(BasicGraph& graph, Vertex* start, Vertex* end) {
     PriorityQueue<Vertex*> pq;
-    Vertex* bestVertex;
+    Vertex* current;
     double altCost;
+    double inf = numeric_limits<double>::infinity();
 
     for (Vertex* vertex : graph.getNodeSet()) {
         if (vertex != start) {
-            vertex->cost = numeric_limits<double>::infinity();
-            vertex->previous = nullptr;
+            vertex->cost = inf;
         }
-        pq.enqueue(vertex, vertex->cost);
     }
+    pq.enqueue(start, start->cost);
+    start->setColor(YELLOW);
 
     while (!pq.isEmpty()) {
-        bestVertex = pq.dequeue();
-        bestVertex->setColor(GREEN);
+        current = pq.dequeue();
+        current->setColor(GREEN);
 
-        if(bestVertex == end) {
-            return bestVertex;
+        if(current == end) {
+            return current;
         }
 
-        for (Vertex* neighbour : graph.getNeighbors(bestVertex)) {
-            altCost = bestVertex->cost + graph.getEdge(bestVertex, neighbour)->cost;
+        for (Vertex* neighbour : graph.getNeighbors(current)) {
+            altCost = current->cost + graph.getEdge(current, neighbour)->cost;
 
             if (altCost < neighbour->cost) {
                 neighbour->cost = altCost;
-                neighbour->previous = bestVertex;
-                pq.changePriority(neighbour, altCost);
+                neighbour->previous = current;
+                pq.enqueue(neighbour, altCost);
                 neighbour->setColor(YELLOW);
             }
         }
     }
+    return nullptr;
 }
 
 vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end) {
@@ -172,57 +174,47 @@ vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end)
 }
 
 Vertex* aStarHelp(BasicGraph& graph, Vertex* start, Vertex* end) {
-    PriorityQueue<Vertex*> pq;
-    Vertex* bestVertex;
+    Vertex* current;
     double altCost;
-    double bestGuessCost;
-    map<Vertex*, double> fscore; //fett onödig
-    set<Vertex*> openSet;
-
+    double bestGuess;
+    double inf = numeric_limits<double>::infinity();
+    PriorityQueue<Vertex*> pq;
 
     for (Vertex* vertex : graph.getNodeSet()) {
         if (vertex != start) {
-            vertex->cost = numeric_limits<double>::infinity();
-            vertex->previous = nullptr;
+            vertex->cost = inf;
         }
-//        pq.enqueue(vertex, vertex->cost);
-//        openSet.insert(vertex);
     }
-
-    pq.enqueue(start, start->cost);
-    openSet.insert(start);
-
+    pq.enqueue(start, start->heuristic(end));
+    start->setColor(YELLOW);
+    start->visited = true;
 
     while (!pq.isEmpty()) {
-        bestVertex = pq.dequeue();
-        openSet.erase(bestVertex);
-        bestVertex->setColor(GREEN);
+        current = pq.dequeue();
+        current->visited = false;
+        current->setColor(GREEN);
 
-        if(bestVertex == end) {
-            return bestVertex;
+        if (current == end) {
+            return current;
         }
 
-        for (Vertex* neighbour : graph.getNeighbors(bestVertex)) {
-            altCost = bestVertex->cost + graph.getEdge(bestVertex, neighbour)->cost;
-
-
+        for (Vertex* neighbour : graph.getNeighbors(current)) {
+            altCost = current->cost + graph.getEdge(current, neighbour)->cost;
             if (altCost < neighbour->cost) {
+                neighbour->previous = current;
                 neighbour->cost = altCost;
-                neighbour->previous = bestVertex;
+                bestGuess = altCost + neighbour->heuristic(end);
 
-                bestGuessCost = altCost + bestVertex->heuristic(neighbour);
-
-
-                if(openSet.find(neighbour) == openSet.end()){
-                    pq.enqueue(neighbour, bestGuessCost);
+                if (!neighbour->visited) {
+                    pq.enqueue(neighbour, bestGuess);
                     neighbour->setColor(YELLOW);
+                    neighbour->visited = true;
                 }
-
-
-
             }
         }
+
     }
+    return nullptr;
 }
 
 vector<Node *> aStar(BasicGraph& graph, Vertex* start, Vertex* end) {
